@@ -30,6 +30,6 @@ export default function RootLayout({
           <Footer />
           </LenisProvider>
       </body>
-    </html>
+    </html> 
   );
 }

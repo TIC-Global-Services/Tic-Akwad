@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { HiPlus } from "react-icons/hi2";
 import Container from "@/components/Reusbale/Container";
+import { usePathname } from "next/navigation";
 
 // Register GSAP plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -13,34 +14,23 @@ gsap.registerPlugin(ScrollTrigger);
 // Navigation items - easy to modify
 const navItems = [
   { name: "About", link: "https://www.theinternetcompany.one/about" },
-  {
-    name: "Design House",
-    link: "https://www.theinternetcompany.one/about.html",
-  },
+
   {
     name: "Client Portal",
     link: "https://www.theinternetcompany.one/client.html",
   },
   { name: "Archive", link: "https://www.theinternetcompany.one/archive" },
-   { name: "Branding", link: "/" },
-
 ];
 
 const FnavItems = [
   { name: "Home", link: "https://www.theinternetcompany.one" },
   { name: "About", link: "https://www.theinternetcompany.one/about" },
   {
-    name: "Design House",
-    link: "https://www.theinternetcompany.one/about.html",
-  },
-  {
     name: "Client Portal",
     link: "https://www.theinternetcompany.one/client.html",
   },
   { name: "Archive", link: "https://www.theinternetcompany.one/archive" },
-  { name: "Contact", link: "https://www.theinternetcompany.one/contact" },
-  { name: "Branding", link: "/" },
-
+  { name: "Contact", link: "/contact" },
 ];
 const Navbar = () => {
   // References for DOM elements
@@ -55,6 +45,10 @@ const Navbar = () => {
   // State management
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+
+  const pathname = usePathname();
+
+  const isWhiteBg = pathname === "/contact";
 
   // Setup initial element states
   const setupInitialStates = useCallback(() => {
@@ -290,11 +284,15 @@ const Navbar = () => {
           <div className="flex-shrink-0">
             <Link href="https://www.theinternetcompany.one">
               <Image
-                src="https://ik.imagekit.io/99y1fc9mh/TIC_Globe/images/newLogo.png?updatedAt=1751867093209"
+                src={
+                  isWhiteBg
+                    ? "https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/Frame%206.png?updatedAt=1759756212630"
+                    : "https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/Frame%205.png?updatedAt=1759756217013"
+                }
                 alt="The Internet Company Logo"
                 width={200}
                 height={100}
-                className="h-15 sm:h-19 lg:h-19 w-auto"
+                className="h-15 sm:h-19 lg:h-20 w-auto"
                 priority
               />
             </Link>
@@ -303,23 +301,29 @@ const Navbar = () => {
           {/* Desktop Navigation Links - Hidden on mobile */}
           <div className="hidden lg:flex items-center gap-5 xl:gap-6">
             {navItems.map((item, index) => (
-              <Link
-                key={`nav-${index}`}
-                href={item.link}
-                className="text-white text-base xl:text-[19px] font-medium hover:text-gray-300 transition-colors duration-300  relative group"
-              >
-                {item.name}
-              </Link>
+             <Link
+      key={`nav-${index}`}
+      href={item.link}
+      className={`text-base xl:text-[19px] font-medium transition-colors duration-300 relative group ${
+        isWhiteBg ? "text-black hover:text-gray-700" : "text-white hover:text-gray-300"
+      }`}
+    >
+      {item.name}
+    </Link>
             ))}
           </div>
 
           {/* CTA Button - Responsive sizing */}
-          <Link
-            href="https://www.theinternetcompany.one/contact"
-            className="bg-transparent text-sm sm:text-base lg:text-lg text-white border border-white px-3 sm:px-4 py-1 sm:py-1 rounded-full font-medium hover:bg-white hover:text-black hover:scale-105 transition-all duration-300 shadow-lg"
-          >
-            Let&apos;s talk
-          </Link>
+         <Link
+      href="/contact"
+      className={`text-sm sm:text-base lg:text-lg px-3 sm:px-4 py-1 sm:py-1 rounded-full font-medium transition-all duration-300 shadow-lg ${
+        isWhiteBg
+          ? "bg-transparent text-black border border-black hover:bg-black hover:text-white hover:scale-105"
+          : "bg-transparent text-white border border-white hover:bg-white hover:text-black hover:scale-105"
+      }`}
+    >
+      Let&apos;s talk
+    </Link>
         </Container>
       </nav>
 

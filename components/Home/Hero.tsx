@@ -13,12 +13,12 @@ const Hero = () => {
   const firstTextRef = useRef<HTMLDivElement | null>(null);
   const secondTextRef = useRef<HTMLDivElement | null>(null);
 
-  const totalFrames = 250;
-  const currentFrame = (index: number) =>
-    `/castle/${(index + 1).toString()}.avif`;
+const totalFrames = 250;
+const currentFrame = (index: number) =>
+ `/Mosque/optimized_${(index + 1).toString().padStart(4, '0')}.webp`;
 
-  const images: HTMLImageElement[] = [];
-  const imgSeq = { frame: 0 };
+const images: HTMLImageElement[] = [];
+const imgSeq = { frame: 0 };
 
   useEffect(() => {
     const canvas = canvasRef.current;
