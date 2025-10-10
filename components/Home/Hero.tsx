@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -12,142 +12,240 @@ const Hero = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
   const firstTextRef = useRef<HTMLDivElement | null>(null);
   const secondTextRef = useRef<HTMLDivElement | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const currentFrameRef = useRef(0);
+  const targetFrameRef = useRef(0);
+  
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [isReady, setIsReady] = useState(false);
 
-const totalFrames = 250;
-const currentFrame = (index: number) =>
- `/Mosque/optimized_${(index + 1).toString().padStart(4, '0')}.webp`;
+  const totalFrames = 250;
+  const currentFrame = (index: number) =>
+    `/Mosque/optimized_${(index + 1).toString().padStart(4, '0')}.webp`;
 
-const images: HTMLImageElement[] = [];
-const imgSeq = { frame: 0 };
+  const images = useRef<HTMLImageElement[]>([]);
+  const imgSeq = useRef({ frame: 0 });
+
+  // Preload images with batching
+  useEffect(() => {
+    let loadedCount = 0;
+    const batchSize = 10; // Load 10 images at a time
+    
+    const loadBatch = (startIndex: number) => {
+      const endIndex = Math.min(startIndex + batchSize, totalFrames);
+      const promises: Promise<void>[] = [];
+
+      for (let i = startIndex; i < endIndex; i++) {
+        const img = new Image();
+        img.src = currentFrame(i);
+        images.current[i] = img;
+
+        const promise = new Promise<void>((resolve) => {
+          img.onload = () => {
+            loadedCount++;
+            setLoadingProgress(Math.round((loadedCount / totalFrames) * 100));
+            resolve();
+          };
+          img.onerror = () => {
+            console.warn(`Failed to load frame ${i}`);
+            loadedCount++;
+            setLoadingProgress(Math.round((loadedCount / totalFrames) * 100));
+            resolve();
+          };
+        });
+
+        promises.push(promise);
+      }
+
+      Promise.all(promises).then(() => {
+        if (endIndex < totalFrames) {
+          // Load next batch
+          loadBatch(endIndex);
+        } else {
+          setIsReady(true);
+        }
+      });
+    };
+
+    loadBatch(0);
+
+    return () => {
+      images.current = [];
+    };
+  }, []);
+
+  // Optimized render function with RAF
+  const render = () => {
+    const canvas = canvasRef.current;
+    const context = contextRef.current;
+    if (!canvas || !context) return;
+
+    const frame = Math.round(currentFrameRef.current);
+    const img = images.current[frame];
+    
+    if (!img || !img.complete) return;
+
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+    const imgWidth = img.naturalWidth || img.width;
+    const imgHeight = img.naturalHeight || img.height;
+
+    if (imgWidth === 0 || imgHeight === 0) return;
+
+    const scale = Math.max(canvasWidth / imgWidth, canvasHeight / imgHeight);
+    const x = canvasWidth / 2 - (imgWidth / 2) * scale;
+    const y = canvasHeight / 2 - (imgHeight / 2) * scale;
+
+    context.clearRect(0, 0, canvasWidth, canvasHeight);
+    context.drawImage(
+      img,
+      0,
+      0,
+      imgWidth,
+      imgHeight,
+      x,
+      y,
+      imgWidth * scale,
+      imgHeight * scale
+    );
+  };
+
+  // Smooth frame interpolation
+  const animate = () => {
+    const diff = targetFrameRef.current - currentFrameRef.current;
+    
+    if (Math.abs(diff) > 0.1) {
+      currentFrameRef.current += diff * 0.15; // Smooth interpolation
+      render();
+    } else {
+      currentFrameRef.current = targetFrameRef.current;
+    }
+
+    rafRef.current = requestAnimationFrame(animate);
+  };
 
   useEffect(() => {
+    if (!isReady) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const context = canvas.getContext("2d");
+    
+    const context = canvas.getContext("2d", {
+      alpha: false, // Performance boost
+      desynchronized: true // Reduces latency
+    });
+    
     if (!context) return;
     contextRef.current = context;
 
-    for (let i = 0; i < totalFrames; i++) {
-      const img = new Image();
-      img.src = currentFrame(i);
-      images.push(img);
-    }
+    canvas.width = 1920;
+    canvas.height = 1080;
 
-    const render = () => {
-      const img = images[imgSeq.frame];
-      if (!img || !img.complete) return;
-      const canvas = canvasRef.current;
-      const context = contextRef.current;
-      if (!canvas || !context) return;
+    // Initial render
+    render();
 
-      const canvasWidth = canvas.width;
-      const canvasHeight = canvas.height;
-      const imgWidth = img.naturalWidth || img.width;
-      const imgHeight = img.naturalHeight || img.height;
+    // Start RAF loop
+    rafRef.current = requestAnimationFrame(animate);
 
-      if (imgWidth === 0 || imgHeight === 0) return;
+    // Set initial states for text
+    gsap.set([firstTextRef.current, secondTextRef.current], {
+      opacity: 0,
+      visibility: "hidden",
+    });
 
-      const scale = Math.max(canvasWidth / imgWidth, canvasHeight / imgHeight);
+    // Text timeline
+    const textTimeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "+=10",
+        end: "+=3000",
+        scrub: 1,
+      },
+    });
 
-      const x = canvasWidth / 2 - (imgWidth / 2) * scale;
-      const y = canvasHeight / 2 - (imgHeight / 2) * scale;
-
-      context.clearRect(0, 0, canvasWidth, canvasHeight);
-      context.drawImage(
-        img,
-        0,
-        0,
-        imgWidth,
-        imgHeight,
-        x,
-        y,
-        imgWidth * scale,
-        imgHeight * scale
-      );
-    };
-
-    images[0].onload = () => {
-      render();
-
-      // Set initial states for both text elements
-      gsap.set([firstTextRef.current, secondTextRef.current], {
+    textTimeline
+      .to(firstTextRef.current, {
+        opacity: 1,
+        visibility: "visible",
+        duration: 0.8,
+        ease: "power2.out",
+      })
+      .to(firstTextRef.current, {
         opacity: 0,
         visibility: "hidden",
-      });
-
-      // Timeline for sequential text animations
-      const textTimeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "+=10",
-          end: "+=3000",
-          scrub: 1,
-        },
-      });
-
-      // First text reveal - simple fade in
-      textTimeline
-        .to(firstTextRef.current, {
+        duration: 0.6,
+        ease: "power2.in",
+      })
+      .to(
+        secondTextRef.current,
+        {
           opacity: 1,
           visibility: "visible",
           duration: 0.8,
           ease: "power2.out",
-        })
-        // Hide first text - simple fade out
-        .to(firstTextRef.current, {
-          opacity: 0,
-          visibility: "hidden",
-          duration: 0.6,
-          ease: "power2.in",
-        })
-        // Show second text with simple fade-in
-        .to(
-          secondTextRef.current,
-          {
-            opacity: 1,
-
-            visibility: "visible",
-            duration: 0.8,
-            ease: "power2.out",
-          },
-          "-=0.1"
-        )
-        // Start color transition from white to black immediately
-        .to(
-          ".text-line-2",
-          {
-            color: "#000000",
-            duration: 1.2,
-            ease: "power2.inOut",
-          },
-          "-=0.4"
-        );
-
-      // Canvas animation
-      gsap.to(imgSeq, {
-        frame: totalFrames - 1,
-        snap: "frame",
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: "+=3500",
-          scrub: 1,
-          pin: true,
         },
-        onUpdate: render,
-      });
-    };
+        "-=0.1"
+      )
+      .to(
+        ".text-line-2",
+        {
+          color: "#000000",
+          duration: 1.2,
+          ease: "power2.inOut",
+        },
+        "-=0.4"
+      );
 
-    canvas.width = 1920;
-    canvas.height = 1080;
-  }, []);
+    // Canvas animation - updates target frame
+    gsap.to(imgSeq.current, {
+      frame: totalFrames - 1,
+      snap: "frame",
+      ease: "none",
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top top",
+        end: "+=3500",
+        scrub: 0.5, // Reduced scrub for smoother response
+        pin: true,
+      },
+      onUpdate: () => {
+        targetFrameRef.current = imgSeq.current.frame;
+      },
+    });
+
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
+  }, [isReady]);
 
   return (
     <section
       ref={sectionRef}
       className="w-full h-screen relative overflow-hidden"
     >
+      {/* Loading indicator */}
+      {!isReady && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black">
+          <div className="text-center">
+            <div className="text-white text-2xl font-medium mb-4">
+              Loading Experience
+            </div>
+            <div className="w-64 h-2 bg-white/20 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-white transition-all duration-300"
+                style={{ width: `${loadingProgress}%` }}
+              />
+            </div>
+            <div className="text-white/70 text-sm mt-2">
+              {loadingProgress}%
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="w-full h-screen flex items-center justify-center overflow-hidden">
         <canvas
           ref={canvasRef}
@@ -163,7 +261,6 @@ const imgSeq = { frame: 0 };
           style={{ opacity: 0, visibility: "hidden" }}
         >
           <div>Our branding speaks loud</div>
-          {/* <div className="md:mt-2">Stronger</div> */}
         </div>
 
         {/* Second Text */}
@@ -176,63 +273,61 @@ const imgSeq = { frame: 0 };
         </div>
 
         {/* Keep Scrolling Text */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 text-white text-sm md:text-base font-light tracking-wider ">
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 text-white text-sm md:text-base font-light tracking-wider">
           <div className="flex flex-row gap-2 sm:gap-3 md:gap-4 items-center justify-center px-3 sm:px-4 py-2 sm:py-2.5 md:py-3">
-            {/* Animated Dot */}
             <div className="flex items-center justify-center">
               <div className="dot-animation bg-white/50" />
             </div>
-
-            {/* Static Text */}
             <span className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-white/50 whitespace-nowrap leading-none">
               Keep scrolling
             </span>
           </div>
         </div>
       </div>
+
       <style jsx>{`
-  .dot-animation {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    animation: pulseCircle 1.5s infinite ease-in-out;
-    flex-shrink: 0;
-  }
+        .dot-animation {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          animation: pulseCircle 1.5s infinite ease-in-out;
+          flex-shrink: 0;
+        }
 
-  @media (min-width: 640px) {
-    .dot-animation { width: 8px; height: 8px; }
-  }
+        @media (min-width: 640px) {
+          .dot-animation { width: 8px; height: 8px; }
+        }
 
-  @media (min-width: 768px) {
-    .dot-animation { width: 10px; height: 10px; }
-  }
+        @media (min-width: 768px) {
+          .dot-animation { width: 10px; height: 10px; }
+        }
 
-  @media (min-width: 1024px) {
-    .dot-animation { width: 12px; height: 12px; }
-  }
+        @media (min-width: 1024px) {
+          .dot-animation { width: 12px; height: 12px; }
+        }
 
-  @keyframes pulseCircle {
-    0%   { opacity: 0.3; transform: scale(0.8) translateX(0); }
-    50%  { opacity: 1;   transform: scale(1.2) translateX(2px); }
-    100% { opacity: 0.3; transform: scale(0.8) translateX(0); }
-  }
+        @keyframes pulseCircle {
+          0%   { opacity: 0.3; transform: scale(0.8) translateX(0); }
+          50%  { opacity: 1;   transform: scale(1.2) translateX(2px); }
+          100% { opacity: 0.3; transform: scale(0.8) translateX(0); }
+        }
 
-  @media (min-width: 640px) {
-    @keyframes pulseCircle {
-      0%   { opacity: 0.3; transform: scale(0.8) translateX(0); }
-      50%  { opacity: 1;   transform: scale(1.2) translateX(3px); }
-      100% { opacity: 0.3; transform: scale(0.8) translateX(0); }
-    }
-  }
+        @media (min-width: 640px) {
+          @keyframes pulseCircle {
+            0%   { opacity: 0.3; transform: scale(0.8) translateX(0); }
+            50%  { opacity: 1;   transform: scale(1.2) translateX(3px); }
+            100% { opacity: 0.3; transform: scale(0.8) translateX(0); }
+          }
+        }
 
-  @media (min-width: 768px) {
-    @keyframes pulseCircle {
-      0%   { opacity: 0.3; transform: scale(0.8) translateX(0); }
-      50%  { opacity: 1;   transform: scale(1.2) translateX(4px); }
-      100% { opacity: 0.3; transform: scale(0.8) translateX(0); }
-    }
-  }
-`}</style>
+        @media (min-width: 768px) {
+          @keyframes pulseCircle {
+            0%   { opacity: 0.3; transform: scale(0.8) translateX(0); }
+            50%  { opacity: 1;   transform: scale(1.2) translateX(4px); }
+            100% { opacity: 0.3; transform: scale(0.8) translateX(0); }
+          }
+        }
+      `}</style>
     </section>
   );
 };
