@@ -24,7 +24,7 @@ const contents = [
   {
     title: '03. Brand identity',
     desc: "We shape your brand from the ground up - defining its essence, voice, and visual language. From logo and color palette to typography and key messaging, we build a cohesive identity that captures who you are and connects with the people you serve",
-    image: 'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/Frame%201171275698.png?updatedAt=1760077600092https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/Frame%201171275699.png?updatedAt=1760079032007'
+    image: 'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/Blank%20Identity%20-%20Quim%20Marin.jpeg?updatedAt=1760088045039'
   },
   {
     title: '04. Wireframes',

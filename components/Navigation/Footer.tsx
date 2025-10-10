@@ -15,13 +15,13 @@ const socialLinks = [
 
 const content = [
   {
-    img: "https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/b11d23f2-c885-4392-991d-fa3fdbdbed24.png?updatedAt=1760000987950",
+    img: "https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/WhatsApp%20Image%202025-10-09%20at%202.54.14%20PM.jpeg?updatedAt=1760087992932",
     name: "Let’s create something impactful together.",
     link: "#",
     button: "Contact us",
   },
   {
-    img: "https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/Light%20Pink%20Minimalist%20Modern%20Elegant%20Quote%20Instagram%20Post%20(1).png?updatedAt=1760001239866",
+    img: "https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/WhatsApp%20Image%202025-10-09%20at%202.54.13%20PM.jpeg?updatedAt=1760087910460",
     name: "See what’s new in our world",
     link: "https://www.instagram.com/the.internetcompany/",
     button: "Go to Insta",

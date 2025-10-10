@@ -9,8 +9,8 @@ const page = () => {
   return (
     <div className='bg-[#F5F5F5]' >
         <Container>
-  
-        <Founder />
+    <Clientele />
+        {/* <Founder /> */}
         <Team />
         </Container>
     <div key="process-section">

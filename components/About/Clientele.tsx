@@ -59,7 +59,7 @@ const Clientele = () => {
         <InfoCard title="Our Belief" items={contact} />
       </div>
 
-      <div className="bg-black rounded-2xl mt-40 p-10 ">
+      {/* <div className="bg-black rounded-2xl mt-40 p-10 ">
         <h1 className="text-7xl tracking-tighter font-medium">Clientele</h1>
         <p className="text-[#7B7B7B] mt-10 max-w-3xl">
           We're proud to collaborate with a diverse range of clients from bold
@@ -83,7 +83,7 @@ const Clientele = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

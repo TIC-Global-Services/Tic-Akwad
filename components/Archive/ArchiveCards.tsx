@@ -41,7 +41,7 @@ const isVideo = /\.(mp4|webm|ogg)(\?|$)/i.test(data.media);
       >
         <div className="relative flex flex-col-reverse lg:flex-row bg-white rounded-2xl  overflow-hidden transition-all  duration-300 ease-out group h-[500px] md:h-[500px] lg:h-[400px] xl:h-[300px]">
           {/* Left Section - Fixed height */}
-          <div className="flex flex-col justify-between  p-3 md:p-4 lg:p-6 w-full lg:w-1/2 h-1/2 lg:h-full">
+          <div className="flex flex-col justify-between  p-3 md:p-4 lg:p-6 w-full lg:w-1/2 h-1/3 lg:h-full">
             <div>
               <h2 className="text-xl sm:text-2xl lg:text-5xl font-medium text-gray-900 tracking-tighter ">
                 {data.name}
@@ -113,7 +113,7 @@ const isVideo = /\.(mp4|webm|ogg)(\?|$)/i.test(data.media);
 
 const ArchiveCards = () => {
   return (
-    <div className="flex flex-col xl:px-[38px] lg:px-[25px] md:px-5 gap-5   bg-[#F5F5F5] min-h-screen">
+    <div className="flex flex-col xl:px-[38px] lg:px-[25px] md:px-5 px-5 gap-5   bg-[#F5F5F5] min-h-screen md:pb-20 pb-10">
       <h1 className="text-7xl mt-[35vh] mb-30 text-black font-medium tracking-tighter ">
         Archive<br />
         <span className="text-[#9F9F9F] tracking-tighter">Some goodies <br /> from our past</span>

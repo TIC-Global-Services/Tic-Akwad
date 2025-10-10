@@ -30,7 +30,7 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased`}>
         <LenisProvider>
           <Navbar />
-          <FPSMeter />
+          {/* <FPSMeter /> */}
           {children}
           <FooterVisibility>
             <Footer />
