@@ -15,14 +15,14 @@ const socialLinks = [
 
 const content = [
   {
-    img: "https://ik.imagekit.io/99y1fc9mh/TIC_Globe/images/Free%20Signage%20Wall%20Mockup.jpg?updatedAt=1729853538414",
-    name: "We're always looking for new collaborations.",
+    img: "https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/b11d23f2-c885-4392-991d-fa3fdbdbed24.png?updatedAt=1760000987950",
+    name: "Let’s create something impactful together.",
     link: "#",
     button: "Contact us",
   },
   {
-    img: "https://ik.imagekit.io/99y1fc9mh/TIC_Globe/images/tic_mock.jpg?updatedAt=1729853516158",
-    name: "Check out our latest news on instagram",
+    img: "https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/Light%20Pink%20Minimalist%20Modern%20Elegant%20Quote%20Instagram%20Post%20(1).png?updatedAt=1760001239866",
+    name: "See what’s new in our world",
     link: "https://www.instagram.com/the.internetcompany/",
     button: "Go to Insta",
   },

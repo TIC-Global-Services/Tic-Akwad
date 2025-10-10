@@ -1,9 +1,12 @@
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/Wrapper/LenisScroll";
 import Navbar from "@/components/Navigation/Navbar";
 import Footer from "@/components/Navigation/Footer";
+import FooterVisibility from "@/components/Reusbale/FooterVisibility";
+import FPSMeter from "@/components/Reusbale/FPSMeter";
 
 // Load Inter font
 const inter = Inter({
@@ -16,6 +19,7 @@ export const metadata: Metadata = {
   description: "The Internet Company",
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -26,8 +30,11 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased`}>
         <LenisProvider>
           <Navbar />
+          <FPSMeter />
           {children}
-          <Footer />
+          <FooterVisibility>
+            <Footer />
+          </FooterVisibility>
           </LenisProvider>
       </body>
     </html> 

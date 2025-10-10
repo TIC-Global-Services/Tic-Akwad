@@ -9,22 +9,22 @@ const contents = [
   {
     icon: Logo1,
     name: "Discover the Vision",
-    desc: "We uncover the story, values, and vision that makes your brand unique.",
+    desc: "We uncover the essence of your brand: its purpose, audience, and digital goals, laying the foundation for every creative and technical decision that follows.",
   },
   {
     icon: Logo2,
     name: "Design the Identity",
-    desc: "We craft an identity system that doesn't just look beautiful, it feels unforgettable.",
+    desc: "From logos to layout, we design visual systems that define who you are and digital interfaces that make your brand instantly recognizable online.",
   },
   {
     icon: Logo3,
     name: "Define the Voice",
-    desc: "We define your voice, ensuring your brand speaks with clarity and confidence.",
+    desc: "We craft the tone, interaction, and journey of your brand ensuring every pixel, word, and click communicates with clarity and consistency.",
   },
   {
     icon: Logo4,
     name: "Deliver the Blueprint",
-    desc: "A full set of brand guidelines, to keep your brand timeless and powerful.",
+    desc: "We bring it all to life - launching a brand and website built to perform, scale, and make a lasting impact across every digital touchpoint.",
   },
 ];
 
@@ -113,12 +113,12 @@ const Vision = () => {
 
       {/* Title */}
       <h1 className="font-medium md:text-[64px] text-[36px] text-[#171717] tracking-tighter md:leading-[72px] leading-[42px] max-w-4xl mx-auto text-center">
-        Your Vision, Our Craft
+       Shaping the Future of Brand Experiences.
       </h1>
 
       {/* Subtitle */}
       <p className="font-medium text-[14px] md:text-[16px] leading-[22px] text-[#171717] md:tracking-[-0.4px] max-w-md mx-auto text-center mt-4 mb-8">
-        Every great brand starts with a story. We turn yours into a legacy.
+        Our approach turns vision into meaningful design and innovation into impact.
       </p>
 
       {/* Input + Button */}

@@ -120,7 +120,7 @@ const Testimonials = () => {
   };
 
   return (
-    <Container className=" bg-[#0a0a0a]">
+    <Container className=" bg-black flex items-center justify-center">
       <div className="max-w-5xl mx-auto pb-10 overflow-hidden relative">
         {/* Top gradient fade */}
         <div className="absolute top-0 left-0 right-0 h-[110px] bg-gradient-to-b from-black to-transparent z-10 pointer-events-none"></div>
