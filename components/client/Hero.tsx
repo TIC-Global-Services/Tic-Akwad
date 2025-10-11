@@ -4,15 +4,16 @@ import Container from '../Reusbale/Container';
 
 const Hero = () => {
   return (
-    <Container>
+    
 <div className='flex h-[100dvh] bg-black items-center justify-center text-center'>
+    <Container>
       <div>
         <h1 className='text-4xl sm:text-5xl md:text-[60px] lg:text-[80px] leading-snug sm:leading-tight md:leading-[80px] lg:leading-[92px] max-w-5xl text-white font-medium tracking-tighter mx-auto'>
           Welcome, We Onboard <br />
           <span className='text-[#1773FF]'>2</span> Projects a Month
         </h1>
 
-        <p className='text-sm sm:text-base md:text-lg lg:text-xl mt-4 sm:mt-5 max-w-2xl mx-auto leading-relaxed'>
+        <p className='text-white text-sm sm:text-base md:text-lg lg:text-xl mt-4 sm:mt-5 max-w-2xl mx-auto leading-relaxed'>
           To give each brand the attention it deserves, we limit our workload to just two projects a month. This ensures high-quality output, focused creativity, and a seamless experience for our clients.
         </p>
       </div>
@@ -75,8 +76,9 @@ const Hero = () => {
           }
         }
       `}</style>
+      </Container>
     </div>
-    </Container>
+ 
     
   )
 }

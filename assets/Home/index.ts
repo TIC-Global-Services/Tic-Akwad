@@ -1,4 +1,4 @@
-export {default as ImageVideo} from '@/assets/Home/Join/Container.png'
+export const ImageVideo = 'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/wmremove-transformed_imgupscaler.ai_Enhancer%20Pro_2K.png?updatedAt=1760166027902'
 
 
 

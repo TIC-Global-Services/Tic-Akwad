@@ -17,7 +17,7 @@ const Team = () => {
 
   return (
     <div className="md:py-20 py-10">
-      <h2 className="text-2xl sm:text-4xl md:text-7xl text-black font-medium md:mb-8 mb-4 text-start tracking-tighter max-w-[750px]">
+      <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-7xl text-black font-medium md:mb-8 mb-4 text-start tracking-tighter max-w-[750px]">
         We're always looking for new collaborations.
       </h2>
 
@@ -66,12 +66,12 @@ const Team = () => {
             {/* Desktop View */}
             <div className="hidden sm:flex flex-row items-center justify-between py-10 gap-6 text-left">
               {/* Role */}
-              <div className="w-1/3 text-black font-medium text-3xl md:text-5xl tracking-tighter">
+              <div className="w-1/3 text-black font-medium text-3xl md:text-4xl xl:text-5xl lg:text-5xl tracking-tighter">
                 {member.role}
               </div>
 
               {/* Name */}
-              <div className="w-1/3 text-black font-medium text-3xl md:text-5xl tracking-tighter">
+              <div className="w-1/3 text-black font-medium text-3xl md:text-4xl xl:text-5xl lg:text-5xl  tracking-tighter">
                 {member.name}
               </div>
 
@@ -79,7 +79,7 @@ const Team = () => {
               <div className="w-1/3 flex justify-end">
                 <a
                   href={`mailto:${member.email}`}
-                  className="inline-flex items-center justify-center px-5 py-3 rounded-full border border-black text-black text-lg md:text-xl font-medium hover:bg-black hover:text-white transition-all duration-300"
+                  className="inline-flex items-center justify-center px-5 py-3 rounded-full border border-black text-black text-lg xl:text-xl lg:text-xl md:text-md font-medium hover:bg-black hover:text-white transition-all duration-300"
                 >
                   {member.email}
                 </a>

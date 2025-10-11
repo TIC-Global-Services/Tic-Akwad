@@ -4,7 +4,7 @@ import Image from "next/image";
 const Join = () => {
   return (
     <div className="pb-20">
-      <div className="grid md:grid-cols-2 grid-cols-1 gap-4 py-10  min-h-[83vh]">
+      <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 py-10  min-h-[83vh]">
         {/* Left Section: Instagram */}
         <div className="bg-[#4B4845] flex flex-col justify-between p-8 md:p-12 rounded-2xl min-h-[350px]">
           <div>

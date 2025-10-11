@@ -49,11 +49,11 @@ const Clientele = () => {
 
   return (
     <div className="flex flex-col gap-5  bg-[#F5F5F5] ">
-      <h1 className="text-7xl font-medium text-black tracking-tighter mt-70">
+      <h1 className="xL:text-7xl lg:text-7xl md:text-6xl text-4xl  font-medium text-black tracking-tighter xl:mt-90 lg:mt-90 md:mt-70 mt-40">
         This is how <br />
         we work
       </h1>
-      <div className="flex flex-col md:flex-row gap-10 md:gap-20 max-w-7xl">
+      <div className="flex flex-col lg:flex-row gap-10 xl:gap-20 lg:gap-20 md:gap-8 max-w-7xl">
         <InfoCard title="Our Approach" items={location} />
         <InfoCard title="Our Focus" items={socials} />
         <InfoCard title="Our Belief" items={contact} />

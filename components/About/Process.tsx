@@ -152,8 +152,8 @@ const Process = () => {
       {/* Horizontal Scroll Container */}
       <div ref={containerRef} className="relative overflow-hidden">
         {/* Gradient Overlays */}
-        <div className="hidden md:block pointer-events-none absolute top-0 left-0 w-32 h-full bg-gradient-to-r from-black via-black/80 to-transparent z-50" />
-        <div className="hidden md:block pointer-events-none absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-black via-black/80 to-transparent z-50" />
+        <div className="hidden md:block pointer-events-none absolute top-0 left-0 lg:w-32 w-15 h-full bg-gradient-to-r from-black via-black/80 to-transparent z-50" />
+        <div className="hidden md:block pointer-events-none absolute top-0 right-0 lg:w-32 w-15 h-full bg-gradient-to-l from-black via-black/80 to-transparent z-50" />
         
         {/* Progress Bar */}
         <div className="absolute top-15 left-0 w-full h-2 bg-[#2E2E2E] z-40">
@@ -173,11 +173,11 @@ const Process = () => {
         >
              
           {contents.map((content, index) => (
-        <div
-              key={index}
-              className="process-section flex-shrink-0 h-screen flex items-start mt-40 justify-center px-8 md:px-16"
-              style={{ width: '65vw' }}
-            >
+       <div
+  key={index}
+  className="process-section flex-shrink-0 md:h-screen flex items-start mt-40 justify-center px-8 md:px-16
+             w-[96vw] sm:w-[80vw] md:w-[70vw] lg:w-[65vw] xl:w-[60vw]"
+>
               <div className="max-w-xl w-full h-full">
                 {index === 0 ? (
                   <div className="space-y-6">
@@ -203,7 +203,7 @@ const Process = () => {
                         <img
                           src={content.image}
                           alt={content.title}
-                          className="w-full h-64 md:h-80 lg:h-100 object-cover"
+                          className="w-full h-64 md:h-100  lg:h-100 xl:h-100 object-cover"
                           loading="lazy"
                         />
                       </div>

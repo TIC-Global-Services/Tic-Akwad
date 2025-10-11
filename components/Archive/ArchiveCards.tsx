@@ -66,9 +66,8 @@ const isVideo = /\.(mp4|webm|ogg)(\?|$)/i.test(data.media);
             </div>
           </div>
 
-          {/* Right Section - Fixed container with parallax content */}
-          {/* Right Section - Fixed container with parallax content */}
-          <div className="w-full lg:w-1/2 h-1/2 lg:h-full p-3 md:p-4 lg:p-6">
+      
+          <div className="w-full lg:w-1/2 h-1/2 md:h-full lg:h-full xl:h-full p-3 md:p-4 lg:p-6">
             <div className="relative w-full h-full overflow-hidden rounded-2xl bg-gray-100">
               <motion.div
                 style={{ y }}

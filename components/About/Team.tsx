@@ -1,96 +1,50 @@
-import { Collabration, LogoKey, OurTeam } from "@/assets/About";
-import React from "react";
-import Image from "next/image";
+import React from 'react'
 
-const Content = [
-  {
-    img: Collabration,
-    title: "Collaboration is key",
-    desc: "TIC was built on the belief that successful branding comes from a collaborative process. We work closely with our clients, ensuring they feel confident and supported at every stage of building their brand.",
-  },
-  {
-    img: LogoKey,
-    title: "Not just a logo",
-    desc: "A logotype is undeniably important and plays a key role in our work, but many companies mistakenly view their logo, colors, and fonts as the entirety of their brand. While this can be true in some instances, its often just a small part of what the audience experiences. In fact, a well-designed landing page can communicate much more than a logo alone.",
-  },
-];
+const content = [
+    {name:'Pragya', role:'Founder', desc:"For me, Akwad is more than a company — it's a vision brought to life. We started with a simple goal: to help businesses overcome their toughest challenges with solutions they can trust. Seeing our clients grow, succeed, and lead in their industries is the most rewarding part of this journey.", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/1.png?updatedAt=1760168917264'},
+    {name:'Pragya', role:'Founder', desc:"For me, Akwad is more than a company — it's a vision brought to life. We started with a simple goal: to help businesses overcome their toughest challenges with solutions they can trust. Seeing our clients grow, succeed, and lead in their industries is the most rewarding part of this journey.", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/2.png?updatedAt=1760168917535'},
+    {name:'Pragya', role:'Founder', desc:"For me, Akwad is more than a company — it's a vision brought to life. We started with a simple goal: to help businesses overcome their toughest challenges with solutions they can trust. Seeing our clients grow, succeed, and lead in their industries is the most rewarding part of this journey.", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/3.png?updatedAt=1760168917527'},
+    {name:'Pragya', role:'Founder', desc:"For me, Akwad is more than a company — it's a vision brought to life. We started with a simple goal: to help businesses overcome their toughest challenges with solutions they can trust. Seeing our clients grow, succeed, and lead in their industries is the most rewarding part of this journey.", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/4.png?updatedAt=1760168917560'},
+    {name:'Pragya', role:'Founder', desc:"For me, Akwad is more than a company — it's a vision brought to life. We started with a simple goal: to help businesses overcome their toughest challenges with solutions they can trust. Seeing our clients grow, succeed, and lead in their industries is the most rewarding part of this journey.", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/5.png?updatedAt=1760168917589'},
+    {name:'Pragya', role:'Founder', desc:"For me, Akwad is more than a company — it's a vision brought to life. We started with a simple goal: to help businesses overcome their toughest challenges with solutions they can trust. Seeing our clients grow, succeed, and lead in their industries is the most rewarding part of this journey.", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/6.png?updatedAt=1760168917567'},
+]
 
 const Team = () => {
   return (
-    <div className="flex flex-col pt-70">
-      <h1 className="text-black text-7xl font-medium mb-5">Our Team</h1>
-      {/* <Image
-        src={OurTeam}
-        alt="Team"
-        width={1000}
-        height={1000}
-        className="w-full h-full rounded-2xl "
-      /> */}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-5 py-10">
-        {Content.map((item, index) => (
-          <div
-            key={index}
-            className="bg-white flex flex-col items-center md:items-start text-center md:text-left rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-          >
-            {/* === Image === */}
-            <div className="w-full h-[300px] md:h-[400px] relative">
-              <Image
-                src={item.img}
-                alt={item.title || "Content Image"}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
+    <div className='flex flex-col w-full pt-30'>
+      <h1 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-center mb-12 text-gray-900'>
+        Founders & Vision
+      </h1>
+      
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8  w-full'>
+        {content.map((member, index) => (
+          <div key={index} className='bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300'>
+            <div className='w-full  overflow-hidden'>
+              <img 
+                src={member.img} 
+                alt={member.name}
+                className='w-full h-[320px] object-cover'
               />
             </div>
-
-            {/* === Text Section === */}
-            <div className="p-6 md:p-8 space-y-3 md:space-y-4">
-              <h1 className="text-black text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight">
-                {item.title}
-              </h1>
-              <p className="text-gray-500 text-base sm:text-lg md:text-xl leading-relaxed">
-                {item.desc}
+            
+            <div className='p-6 '>
+              <h2 className='text-2xl font-bold text-gray-900 mb-1'>
+                {member.name}
+              </h2>
+              
+              <p className='text-sm font-semibold text-black uppercase tracking-wide mb-3'>
+                {member.role}
+              </p>
+              
+              <p className='text-gray-600 leading-relaxed text-sm'>
+                {member.desc}
               </p>
             </div>
           </div>
         ))}
       </div>
-   <div className="bg-white w-full flex flex-col md:flex-row items-center justify-center py-12 px-6 md:px-12 gap-8 md:gap-12">
-      
-      {/* Left Content - 40% */}
-      <div className="w-full md:w-2/5 flex flex-col justify-center">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-6">
-          Building strong brands with final output in focus
-        </h1>
-        <div className="text-gray-700 space-y-4 text-sm sm:text-base md:text-lg leading-relaxed">
-          <p>
-            If a website falls short, no matter how impressive the guidelines
-            or design presentations are, the consumer won't engage with them.
-            While we use design presentations to help convey the concept and
-            the broader vision, our priority is always on what the end user
-            will experience. Instead of following the traditional approach.
-          </p>
-          <p>
-            we reverse the process by starting with the final product and
-            concluding with the guidelines.
-          </p>
-        </div>
-      </div>
-
-      {/* Right Image - 60% */}
-      <div className="w-full md:w-3/5 flex justify-center md:justify-end">
-        <Image
-          src="https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/akward.png?updatedAt=1760076775861"
-          alt="MockUp"
-          width={1000}
-          height={1000}
-          className="w-full h-full bg-black object-cover"
-        />
-      </div>
     </div>
-    </div>
-  );
-};
+  )
+}
 
-export default Team;
+export default Team

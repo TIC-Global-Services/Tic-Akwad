@@ -4,6 +4,7 @@ import { IoLogoLinkedin } from "react-icons/io5";
 import { FaInstagram } from "react-icons/fa";
 import Image from "next/image";
 import { RiArrowRightLine } from "react-icons/ri";
+import Container from "../Reusbale/Container";
 
 const socialLinks = [
   {
@@ -55,9 +56,10 @@ const Footer = () => {
       ref={footerRef}
       className="min-h-screen w-full bg-black text-white overflow-hidden"
     >
-      <div className="container mx-auto px-4 sm:px-6 md:px-7 py-8 md:py-15 h-full flex flex-col justify-between">
+      <Container>
+          <div className="container mx-auto  py-8 xl:py-15 lg:py-10 h-full flex flex-col justify-between">
         {/* Main Content Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8 md:mb-16 flex-1 pt-12 sm:pt-16 md:pt-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-8 md:mb-16 flex-1 pt-12 sm:pt-16 md:pt-20">
           {content.map((item, index) => {
             const parallaxOffset = scrollY * 15;
 
@@ -139,6 +141,9 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      </Container>
+
+    
     </footer>
   );
 };

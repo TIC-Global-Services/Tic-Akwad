@@ -15,9 +15,7 @@ const Hero = () => {
   const rafRef = useRef<number | null>(null);
   const currentFrameRef = useRef(0);
   const targetFrameRef = useRef(0);
-  
-  const [loadingProgress, setLoadingProgress] = useState(0);
-  const [isReady, setIsReady] = useState(false);
+  const [firstFrameLoaded, setFirstFrameLoaded] = useState(false);
 
   const totalFrames = 250;
   const currentFrame = (index: number) =>
@@ -25,54 +23,6 @@ const Hero = () => {
 
   const images = useRef<HTMLImageElement[]>([]);
   const imgSeq = useRef({ frame: 0 });
-
-  // Preload images with batching
-  useEffect(() => {
-    let loadedCount = 0;
-    const batchSize = 10; // Load 10 images at a time
-    
-    const loadBatch = (startIndex: number) => {
-      const endIndex = Math.min(startIndex + batchSize, totalFrames);
-      const promises: Promise<void>[] = [];
-
-      for (let i = startIndex; i < endIndex; i++) {
-        const img = new Image();
-        img.src = currentFrame(i);
-        images.current[i] = img;
-
-        const promise = new Promise<void>((resolve) => {
-          img.onload = () => {
-            loadedCount++;
-            setLoadingProgress(Math.round((loadedCount / totalFrames) * 100));
-            resolve();
-          };
-          img.onerror = () => {
-            console.warn(`Failed to load frame ${i}`);
-            loadedCount++;
-            setLoadingProgress(Math.round((loadedCount / totalFrames) * 100));
-            resolve();
-          };
-        });
-
-        promises.push(promise);
-      }
-
-      Promise.all(promises).then(() => {
-        if (endIndex < totalFrames) {
-          // Load next batch
-          loadBatch(endIndex);
-        } else {
-          setIsReady(true);
-        }
-      });
-    };
-
-    loadBatch(0);
-
-    return () => {
-      images.current = [];
-    };
-  }, []);
 
   // Optimized render function with RAF
   const render = () => {
@@ -124,15 +74,70 @@ const Hero = () => {
     rafRef.current = requestAnimationFrame(animate);
   };
 
+  // Preload images - prioritize first frame
   useEffect(() => {
-    if (!isReady) return;
+    // Load first frame immediately
+    const firstImg = new Image();
+    firstImg.src = currentFrame(0);
+    images.current[0] = firstImg;
+    
+    firstImg.onload = () => {
+      setFirstFrameLoaded(true);
+      // Render first frame immediately
+      if (contextRef.current) {
+        render();
+      }
+    };
+
+    // Then load remaining frames in batches
+    const batchSize = 15;
+    
+    const loadBatch = (startIndex: number) => {
+      if (startIndex === 0) startIndex = 1; // Skip first frame as it's already loading
+      
+      const endIndex = Math.min(startIndex + batchSize, totalFrames);
+      const promises: Promise<void>[] = [];
+
+      for (let i = startIndex; i < endIndex; i++) {
+        const img = new Image();
+        img.src = currentFrame(i);
+        images.current[i] = img;
+
+        const promise = new Promise<void>((resolve) => {
+          img.onload = () => resolve();
+          img.onerror = () => {
+            console.warn(`Failed to load frame ${i}`);
+            resolve();
+          };
+        });
+
+        promises.push(promise);
+      }
+
+      Promise.all(promises).then(() => {
+        if (endIndex < totalFrames) {
+          loadBatch(endIndex);
+        }
+      });
+    };
+
+    // Start loading other frames after a small delay to prioritize first frame
+    setTimeout(() => loadBatch(1), 100);
+
+    return () => {
+      images.current = [];
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!firstFrameLoaded) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
     
     const context = canvas.getContext("2d", {
-      alpha: false, // Performance boost
-      desynchronized: true // Reduces latency
+      alpha: false,
+      desynchronized: true
     });
     
     if (!context) return;
@@ -205,7 +210,7 @@ const Hero = () => {
         trigger: sectionRef.current,
         start: "top top",
         end: "+=3500",
-        scrub: 0.5, // Reduced scrub for smoother response
+        scrub: 0.5,
         pin: true,
       },
       onUpdate: () => {
@@ -219,39 +224,20 @@ const Hero = () => {
       }
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
-  }, [isReady]);
+  }, [firstFrameLoaded]);
 
   return (
     <section
       ref={sectionRef}
-      className="w-full h-screen relative overflow-hidden"
+      className="w-full h-screen relative overflow-hidden bg-white"
     >
-      {/* Loading indicator */}
-      {!isReady && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black">
-          <div className="text-center">
-            <div className="text-white text-2xl font-medium mb-4">
-              Loading Experience
-            </div>
-            <div className="w-64 h-2 bg-white/20 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-white transition-all duration-300"
-                style={{ width: `${loadingProgress}%` }}
-              />
-            </div>
-            <div className="text-white/70 text-sm mt-2">
-              {loadingProgress}%
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className="w-full h-screen flex items-center justify-center overflow-hidden">
         <canvas
           ref={canvasRef}
           width={1920}
           height={1080}
           className="absolute inset-0 w-full h-screen object-cover z-10"
+          style={{ opacity: firstFrameLoaded ? 1 : 0, transition: 'opacity 0.3s ease-in' }}
         />
 
         {/* First Text */}

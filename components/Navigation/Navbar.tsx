@@ -307,7 +307,7 @@ const Navbar = () => {
         onClick={toggleMenu}
         onMouseEnter={handleHoverEnter}
         onMouseLeave={handleHoverLeave}
-        className="fixed top-4 right-4 sm:top-5 sm:right-5 lg:top-7 lg:right-6 z-50 w-12 h-12 sm:w-14 sm:h-14 lg:w-17 lg:h-17 bg-white cursor-pointer rounded-full flex items-center justify-center shadow-md transition-all duration-300 group lg:hover:bg-black lg:hover:scale-105 lg:hover:shadow-lg"
+        className="fixed top-4 right-4 sm:top-5 sm:right-5 lg:top-7 lg:right-6 z-50 w-12 h-12 sm:w-14 sm:h-14 md:w-15 md:h-15 lg:w-17 lg:h-17 bg-white cursor-pointer rounded-full flex items-center justify-center shadow-md transition-all duration-300 group lg:hover:bg-black lg:hover:scale-105 lg:hover:shadow-lg"
         style={{ opacity: 0 }}
         aria-label={isMenuOpen ? "Close menu" : "Open menu"}
       >
@@ -317,8 +317,8 @@ const Navbar = () => {
       </button>
 
       {/* Full Screen Overlay Menu */}
-      <div ref={refs.overlay} className="fixed inset-0 bg-black z-45" role="dialog" aria-modal="true" aria-labelledby="menu-title">
-        <div className="md:h-full h-1/2 w-full flex md:flex-row flex-col items-start justify-center px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-48">
+      <div ref={refs.overlay}     style={{ visibility: 'hidden', clipPath: 'circle(0% at 95% 5%)' }} className="fixed inset-0 bg-black z-45" role="dialog" aria-modal="true" aria-labelledby="menu-title">
+        <div className="xl:h-full lg:h-full md:h-1/2 h-1/2 w-full flex lg:flex-row flex-col items-start justify-center px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-48">
           {/* Logo */}
           <div className="flex-1 flex items-start justify-start">
             <div ref={refs.overlayLogo} className="flex-shrink-0">
@@ -335,7 +335,7 @@ const Navbar = () => {
               <nav className="space-y-2 sm:space-y-3 lg:space-y-4 text-start" id="menu-title">
                 {FULL_NAV_ITEMS.map((item, index) => (
                   <div key={`overlay-nav-${index}`} className="relative">
-                    <a href={item.link} onClick={handleLinkClick} className="block text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-medium tracking-tight text-white hover:text-gray-400 transition-colors">
+                    <a href={item.link} onClick={handleLinkClick} className="block text-2xl sm:text-2xl md:text-5xl lg:text-4xl xl:text-5xl font-medium tracking-tight text-white hover:text-gray-400 transition-colors">
                       {item.name}
                     </a>
 
@@ -346,7 +346,7 @@ const Navbar = () => {
                     )}
 
                     {item.name === "Archive" && (
-                      <span className="absolute -top-1 -right-1 sm:-right-12 lg:right-1 px-2 py-1 text-xs bg-gray-700 text-white rounded">
+                      <span className="absolute -top-1 -right-[-4px] md:-right-[-65px] sm:-right-12 lg:right-1 px-2 py-1 text-xs bg-gray-700 text-white rounded">
                         36
                       </span>
                     )}
@@ -358,7 +358,7 @@ const Navbar = () => {
             {/* Social Links */}
             <div ref={refs.socialLinks} className="flex flex-col items-start">
               {SOCIAL_LINKS.map(({ href, label }) => (
-                <a key={label} href={href} onClick={handleLinkClick} target="_blank" rel="noopener noreferrer" className="text-sm sm:text-base lg:text-3xl tracking-tighter text-white hover:text-[#595959] transition-colors">
+                <a key={label} href={href} onClick={handleLinkClick} target="_blank" rel="noopener noreferrer" className="text-xl md:text-2xl lg:text:3xl xl:text-3xl tracking-tighter text-white hover:text-[#595959] transition-colors">
                   {label}
                 </a>
               ))}

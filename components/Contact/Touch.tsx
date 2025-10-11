@@ -50,8 +50,8 @@ const Touch: React.FC = () => {
 
   return (
     <div className="">
-      <Container className="flex flex-col gap-12 justify-end items-start h-[80dvh] md:py-20">
-        <h1 className="text-7xl font-medium text-black ">
+      <Container className="flex flex-col gap-12 justify-end items-start md:h-[80dvh] h-[100dvh] md:py-20">
+        <h1 className="md:text-7xl text-5xl font-medium text-black tracking-tighter">
           Let's get in <br /> touch
         </h1>
 
