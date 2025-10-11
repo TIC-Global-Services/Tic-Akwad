@@ -1,5 +1,7 @@
+"use client";
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const Join = () => {
   return (
@@ -23,9 +25,9 @@ const Join = () => {
             </h1>
           </div>
 
-          <button className="border border-white bg-transparent text-white font-semibold px-6 py-3 rounded-full hover:bg-white hover:text-black cursor-pointer transition self-start md:text-[20px]">
+          <Link href='https://www.instagram.com/the.internetcompany/' className="border border-white bg-transparent text-white font-semibold px-6 py-3 rounded-full hover:bg-white hover:text-black cursor-pointer transition self-start md:text-[20px]">
             TIC.Global
-          </button>
+          </Link>
         </div>
 
         {/* Right Section: Join our team */}
@@ -40,9 +42,13 @@ const Join = () => {
             </p>
           </div>
 
-          <button className="border border-[#4B4845] bg-transparent text-black font-semibold px-4 py-3 rounded-full hover:bg-black hover:text-white transition self-start cursor-pointer md:text-[20px]">
-            admin@theinternetcompany.com
-          </button>
+          <button
+  className="border border-[#4B4845] bg-transparent text-black font-semibold px-4 py-3 rounded-full hover:bg-black hover:text-white transition self-start cursor-pointer md:text-[20px]"
+  onClick={() => window.location.href = 'mailto:admin@theinternetcompany.com'}
+>
+  admin@theinternetcompany.com
+</button>
+
         </div>
       </div>
     </div>

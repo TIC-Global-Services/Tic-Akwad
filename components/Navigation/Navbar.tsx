@@ -19,6 +19,8 @@ const NAV_ITEMS = [
   { name: "About", link: "/about" },
   { name: "Client Portal", link: "/client" },
   { name: "Archive", link: "/archive" },
+  {name:"Brand Stories", link:'/brand-stories'},
+
 ] as const;
 
 const FULL_NAV_ITEMS = [
@@ -26,18 +28,18 @@ const FULL_NAV_ITEMS = [
   { name: "About", link: "/about" },
   { name: "Client Portal", link: "/client" },
   { name: "Archive", link: "/archive" },
+  {name:"Brand Stories", link:'/brand-stories'},
   { name: "Contact", link: "/contact" },
 ] as const;
 
 const SOCIAL_LINKS = [
-  { href: "https://instagram.com", label: "Instagram" },
-  { href: "https://linkedin.com", label: "LinkedIn" },
+  { href: "https://www.instagram.com/the.internetcompany/", label: "Instagram" },
+  { href: "https://www.linkedin.com/company/tic-global-services/", label: "LinkedIn" },
 ] as const;
 
 const LOGO_URLS = {
   white: "https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/Frame%206.png?updatedAt=1759756212630",
   black: "https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/Frame%205.png?updatedAt=1759756217013",
-  overlay: "https://ik.imagekit.io/99y1fc9mh/TIC_Globe/images/newLogo.png?updatedAt=1751867093209",
 } as const;
 
 const WHITE_BG_PATHS = ["/contact", "/archive", "/about"];
@@ -323,7 +325,7 @@ const Navbar = () => {
           <div className="flex-1 flex items-start justify-start">
             <div ref={refs.overlayLogo} className="flex-shrink-0">
               <a href="/" onClick={handleLinkClick}>
-                <img src={LOGO_URLS.overlay} alt="The Internet Company Logo" className="h-20 sm:h-20 lg:h-30 w-auto" />
+                <img src={LOGO_URLS.white} alt="The Internet Company Logo" className="h-20 sm:h-20 lg:h-30 w-auto" />
               </a>
             </div>
           </div>

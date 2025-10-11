@@ -66,5 +66,5 @@ export {default as LinkLogo} from '@/assets/About/Founder/linkedin.png'
     
 
 export const OurTeam = 'https://ik.imagekit.io/99y1fc9mh/TIC_Globe/images/about/Screenshot%202025-08-20%20at%207.53.57%E2%80%AFPM.png?updatedAt=1755708224949'
-export const Collabration = 'https://ik.imagekit.io/99y1fc9mh/TIC_Globe/images/about-page.png?updatedAt=1729853522435'
+export const Collabration = 'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/business-people-shaking-hands-agreement%20(1).jpg?updatedAt=1760178592866'
 export const LogoKey = 'https://ik.imagekit.io/99y1fc9mh/TIC_Globe/images/rope.png?updatedAt=1729853517360'

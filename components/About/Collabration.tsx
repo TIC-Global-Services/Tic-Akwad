@@ -31,7 +31,7 @@ const Collaboration = () => {
         {Content.map((item, index) => (
           <div
             key={index}
-            className="bg-white py-5 flex flex-col items-center md:items-start text-center md:text-left rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+            className="bg-white pb-5 flex flex-col items-center md:items-start text-center md:text-left rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
           >
             {/* === Image === */}
             <div className="w-full h-[300px] md:h-[400px] relative">

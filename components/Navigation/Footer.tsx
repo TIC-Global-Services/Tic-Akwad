@@ -11,14 +11,14 @@ const socialLinks = [
     link: "https://www.instagram.com/the.internetcompany/",
     logo: <FaInstagram />,
   },
-  { link: "#", logo: <IoLogoLinkedin /> },
+  { link: "https://www.linkedin.com/company/tic-global-services/", logo: <IoLogoLinkedin /> },
 ];
 
 const content = [
   {
     img: "https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/WhatsApp%20Image%202025-10-09%20at%202.54.14%20PM.jpeg?updatedAt=1760087992932",
     name: "Let’s create something impactful together.",
-    link: "#",
+    link: "/contact",
     button: "Contact us",
   },
   {

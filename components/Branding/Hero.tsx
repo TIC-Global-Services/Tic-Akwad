@@ -3,8 +3,8 @@ import React from 'react'
 
 const Hero = () => {
   return (
-    <div className="flex flex-col gap-3 items-center justify-center h-screen px-4 text-center">
-      <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-semibold tracking-tight leading-tight md:leading-[110px] max-w-3xl">
+    <div className="bg-black flex flex-col gap-3 items-center justify-center h-screen px-4 text-center">
+      <h1 className="text-white text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-semibold tracking-tight  xl:leading-[110px] max-w-3xl">
         One home <br />
         for <span className="text-[#808080]">your design</span>
       </h1>
