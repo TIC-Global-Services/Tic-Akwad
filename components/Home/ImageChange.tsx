@@ -163,11 +163,11 @@ const ImageChange = () => {
 
   return (
     <div ref={containerRef} className="w-full md:h-screen h-[500px] p-4 bg-white">
-      <div className="w-full h-full relative overflow-hidden">
+      <div className="w-full h-full relative overflow-hidden rounded-2xl">
         <img
           src={current.image}
           alt={current.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover rounded-2xl"
         />
 
         <div className="absolute top-5 left-5">

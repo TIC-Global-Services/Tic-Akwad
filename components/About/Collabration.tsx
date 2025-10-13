@@ -68,13 +68,13 @@ const Collaboration = () => {
 
         {/* Right Image Section */}
         <div className="w-full lg:w-3/5 mt-8 lg:mt-0 flex justify-center lg:justify-end">
-          <div className="relative w-full max-w-[600px] h-[400px] md:h-[500px]">
+          <div className="relative w-full max-w-[600px] h-[400px] md:h-[750px]">
             <Image
               src="https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/akward%201.png?updatedAt=1760166234219"
               alt="MockUp"
               fill
               className="object-contain"
-              sizes="(max-width: 768px) 100vw, 600px"
+              sizes="(max-width: 768px) 100vw, 950px"
               priority
             />
           </div>
