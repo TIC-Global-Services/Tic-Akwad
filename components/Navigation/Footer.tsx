@@ -11,10 +11,10 @@ const socialLinks = [
     link: "https://www.instagram.com/the.internetcompany/",
     logo: <FaInstagram />,
   },
-  {
-    link: "https://www.linkedin.com/company/tic-global-services/",
-    logo: <IoLogoLinkedin />,
-  },
+  // {
+  //   link: "https://www.linkedin.com/company/tic-global-services/",
+  //   logo: <IoLogoLinkedin />,
+  // },
 ];
 
 const content = [

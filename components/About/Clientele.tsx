@@ -49,7 +49,7 @@ const Clientele = () => {
 
   return (
     <div className="flex flex-col gap-5  bg-[#F5F5F5] ">
-      <h1 className="xL:text-7xl lg:text-7xl md:text-6xl text-4xl  font-medium text-black tracking-tighter xl:mt-90 lg:mt-90 md:mt-70 mt-40">
+      <h1 className="xL:text-7xl lg:text-7xl md:text-6xl text-4xl  font-medium text-black tracking-tighter xl:mt-100 lg:mt-90 md:mt-70 mt-40">
         This is how <br />
         we work
       </h1>

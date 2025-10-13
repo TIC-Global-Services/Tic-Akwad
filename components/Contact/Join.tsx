@@ -26,7 +26,7 @@ const Join = () => {
           </div>
 
           <Link
-            href="https://www.instagram.com/the.internetcompany/"
+            href="https://www.instagram.com/ticbyakwad?igsh=dXB1ejczMjluNG1y"
             className="border border-white bg-transparent text-white font-semibold px-6 py-3 rounded-full hover:bg-white hover:text-black cursor-pointer transition self-start md:text-[20px]"
           >
             TIC.Global
@@ -48,10 +48,10 @@ const Join = () => {
           <button
             className="border border-[#4B4845] bg-transparent text-black font-semibold px-4 py-3 rounded-full hover:bg-black hover:text-white transition self-start cursor-pointer md:text-[20px]"
             onClick={() =>
-              (window.location.href = "mailto:admin@theinternetcompany.com")
+              (window.location.href = "mailto:admin@ticbyakwad.com")
             }
           >
-            admin@theinternetcompany.com
+            admin@tibyakwad.com
           </button>
         </div>
       </div>

@@ -21,17 +21,17 @@ const Follow = () => {
         {/* Bottom Left Buttons */}
         <div className="flex flex-wrap gap-4 z-10">
           <Link
-            href="https://www.instagram.com/the.internetcompany/"
+            href="https://www.instagram.com/ticbyakwad?igsh=dXB1ejczMjluNG1y"
             className="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full bg-transparent text-black border border-black transition-all duration-300 hover:bg-black hover:text-white hover:scale-105 text-sm sm:text-base md:text-[24px]"
           >
             Instagram
           </Link>
-          <Link
+          {/* <Link
             href="https://www.linkedin.com/company/tic-global-services/"
             className="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full bg-transparent text-black border border-black transition-all duration-300 hover:bg-black hover:text-white hover:scale-105 text-sm sm:text-base md:text-[24px]"
           >
             Linkedin
-          </Link>
+          </Link> */}
         </div>
 
         {/* Bottom Right Image */}

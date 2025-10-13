@@ -39,13 +39,13 @@ const Touch: React.FC = () => {
   ];
 
   const contact: InfoItem[] = [
-    { label: "Pragya Muthuraman", href: "mailto:pragya@example.com" },
-    { label: "Shajid", href: "mailto:shajid@example.com" },
+    { label: "Pragya Muthuraman", href: "mailto:theinternetcompany01@gmail.com" },
+    { label: "Sajid Manzur", href: "mailto:ticbyakwad@gmail.com" },
   ];
 
   const socials: InfoItem[] = [
-    { label: "LinkedIn", href: "https://linkedin.com" },
-    { label: "Instagram", href: "https://instagram.com" },
+    // { label: "LinkedIn", href: "https://linkedin.com" },
+    { label: "Instagram", href: "https://www.instagram.com/ticbyakwad?igsh=dXB1ejczMjluNG1y" },
   ];
 
   return (

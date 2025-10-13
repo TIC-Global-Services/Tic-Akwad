@@ -16,6 +16,9 @@ const Hero = () => {
   const currentFrameRef = useRef(0);
   const targetFrameRef = useRef(0);
   const [firstFrameLoaded, setFirstFrameLoaded] = useState(false);
+  const [loadProgress, setLoadProgress] = useState(0);
+  const isAnimatingRef = useRef(false);
+  const lastRenderTimeRef = useRef(0);
 
   const totalFrames = 250;
   const currentFrame = (index: number) =>
@@ -23,8 +26,9 @@ const Hero = () => {
 
   const images = useRef<HTMLImageElement[]>([]);
   const imgSeq = useRef({ frame: 0 });
+  const offscreenCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Optimized render function with RAF
+  // Optimized render with throttling
   const render = () => {
     const canvas = canvasRef.current;
     const context = contextRef.current;
@@ -33,98 +37,151 @@ const Hero = () => {
     const frame = Math.round(currentFrameRef.current);
     const img = images.current[frame];
     
-    if (!img || !img.complete) return;
+    if (!img || !img.complete || !img.naturalWidth) return;
 
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
-    const imgWidth = img.naturalWidth || img.width;
-    const imgHeight = img.naturalHeight || img.height;
-
-    if (imgWidth === 0 || imgHeight === 0) return;
+    const imgWidth = img.naturalWidth;
+    const imgHeight = img.naturalHeight;
 
     const scale = Math.max(canvasWidth / imgWidth, canvasHeight / imgHeight);
-    const x = canvasWidth / 2 - (imgWidth / 2) * scale;
-    const y = canvasHeight / 2 - (imgHeight / 2) * scale;
+    const x = (canvasWidth - imgWidth * scale) / 2;
+    const y = (canvasHeight - imgHeight * scale) / 2;
 
     context.clearRect(0, 0, canvasWidth, canvasHeight);
-    context.drawImage(
-      img,
-      0,
-      0,
-      imgWidth,
-      imgHeight,
-      x,
-      y,
-      imgWidth * scale,
-      imgHeight * scale
-    );
+    context.drawImage(img, 0, 0, imgWidth, imgHeight, x, y, imgWidth * scale, imgHeight * scale);
   };
 
-  // Smooth frame interpolation
-  const animate = () => {
+  // Ultra-smooth frame interpolation with adaptive easing
+  const animate = (timestamp: number) => {
+    // Throttle rendering to ~60fps max
+    const elapsed = timestamp - lastRenderTimeRef.current;
+    
+    if (elapsed < 16) { // ~60fps
+      rafRef.current = requestAnimationFrame(animate);
+      return;
+    }
+    
+    lastRenderTimeRef.current = timestamp;
+
     const diff = targetFrameRef.current - currentFrameRef.current;
     
-    if (Math.abs(diff) > 0.1) {
-      currentFrameRef.current += diff * 0.15; // Smooth interpolation
+    if (Math.abs(diff) > 0.05) {
+      // Adaptive smoothing - faster when far, slower when close
+      const smoothFactor = Math.abs(diff) > 5 ? 0.2 : 0.12;
+      currentFrameRef.current += diff * smoothFactor;
       render();
+      isAnimatingRef.current = true;
     } else {
       currentFrameRef.current = targetFrameRef.current;
+      if (isAnimatingRef.current) {
+        render();
+        isAnimatingRef.current = false;
+      }
     }
 
     rafRef.current = requestAnimationFrame(animate);
   };
 
-  // Preload images - prioritize first frame
+  // Aggressive preloading with priority queue
   useEffect(() => {
-    // Load first frame immediately
+    let loadedCount = 0;
+    const priorityFrames = [0, 1, 2, 3, 4, 5, 10, 15, 20, 30, 50, 75, 100, 150, 200, 249];
+    const loadedFrames = new Set<number>();
+
+    // Load first frame with highest priority
     const firstImg = new Image();
     firstImg.src = currentFrame(0);
     images.current[0] = firstImg;
     
     firstImg.onload = () => {
       setFirstFrameLoaded(true);
-      // Render first frame immediately
-      if (contextRef.current) {
-        render();
-      }
+      loadedFrames.add(0);
+      loadedCount++;
+      setLoadProgress(Math.round((loadedCount / totalFrames) * 100));
+      if (contextRef.current) render();
     };
 
-    // Then load remaining frames in batches
-    const batchSize = 15;
-    
-    const loadBatch = (startIndex: number) => {
-      if (startIndex === 0) startIndex = 1; // Skip first frame as it's already loading
-      
-      const endIndex = Math.min(startIndex + batchSize, totalFrames);
-      const promises: Promise<void>[] = [];
-
-      for (let i = startIndex; i < endIndex; i++) {
-        const img = new Image();
-        img.src = currentFrame(i);
-        images.current[i] = img;
-
-        const promise = new Promise<void>((resolve) => {
-          img.onload = () => resolve();
-          img.onerror = () => {
-            console.warn(`Failed to load frame ${i}`);
-            resolve();
-          };
-        });
-
-        promises.push(promise);
-      }
-
-      Promise.all(promises).then(() => {
-        if (endIndex < totalFrames) {
-          loadBatch(endIndex);
-        }
+    // Load priority frames first
+    const loadPriorityFrames = () => {
+      priorityFrames.slice(1).forEach((frameIndex, idx) => {
+        setTimeout(() => {
+          if (frameIndex < totalFrames && !loadedFrames.has(frameIndex)) {
+            const img = new Image();
+            img.src = currentFrame(frameIndex);
+            images.current[frameIndex] = img;
+            
+            img.onload = () => {
+              loadedFrames.add(frameIndex);
+              loadedCount++;
+              setLoadProgress(Math.round((loadedCount / totalFrames) * 100));
+            };
+            img.onerror = () => {
+              loadedFrames.add(frameIndex);
+              loadedCount++;
+            };
+          }
+        }, idx * 20);
       });
     };
 
-    // Start loading other frames after a small delay to prioritize first frame
-    setTimeout(() => loadBatch(1), 100);
+    setTimeout(loadPriorityFrames, 50);
+
+    // Load remaining frames in optimized batches
+    const loadRemainingFrames = () => {
+      const batchSize = 10;
+      let currentIndex = 1;
+
+      const loadBatch = () => {
+        const promises: Promise<void>[] = [];
+        
+        for (let i = 0; i < batchSize && currentIndex < totalFrames; i++) {
+          if (!loadedFrames.has(currentIndex) && !priorityFrames.includes(currentIndex)) {
+            const frameIndex = currentIndex;
+            const img = new Image();
+            img.src = currentFrame(frameIndex);
+            images.current[frameIndex] = img;
+
+            const promise = new Promise<void>((resolve) => {
+              img.onload = () => {
+                loadedFrames.add(frameIndex);
+                loadedCount++;
+                setLoadProgress(Math.round((loadedCount / totalFrames) * 100));
+                resolve();
+              };
+              img.onerror = () => {
+                loadedFrames.add(frameIndex);
+                loadedCount++;
+                resolve();
+              };
+            });
+            promises.push(promise);
+          }
+          currentIndex++;
+        }
+
+        if (promises.length > 0) {
+          Promise.all(promises).then(() => {
+            if (currentIndex < totalFrames) {
+              setTimeout(loadBatch, 30);
+            }
+          });
+        } else if (currentIndex < totalFrames) {
+          setTimeout(loadBatch, 30);
+        }
+      };
+
+      loadBatch();
+    };
+
+    setTimeout(loadRemainingFrames, 200);
 
     return () => {
+      images.current.forEach(img => {
+        if (img) {
+          img.src = '';
+        }
+      });
       images.current = [];
     };
   }, []);
@@ -137,34 +194,44 @@ const Hero = () => {
     
     const context = canvas.getContext("2d", {
       alpha: false,
-      desynchronized: true
+      desynchronized: true,
+      willReadFrequently: false
     });
     
     if (!context) return;
+    
+    // Optimize context settings
+    context.imageSmoothingEnabled = true;
+    context.imageSmoothingQuality = 'high';
     contextRef.current = context;
 
+    // Set canvas size based on device pixel ratio for crisp rendering
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = 1920;
     canvas.height = 1080;
 
-    // Initial render
     render();
 
-    // Start RAF loop
+    // Start optimized RAF loop
+    lastRenderTimeRef.current = performance.now();
     rafRef.current = requestAnimationFrame(animate);
 
     // Set initial states for text
     gsap.set([firstTextRef.current, secondTextRef.current], {
       opacity: 0,
       visibility: "hidden",
+      force3D: true,
+      z: 0.01
     });
 
-    // Text timeline
+    // Optimized text timeline
     const textTimeline = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
         start: "+=10",
         end: "+=3000",
         scrub: 1,
+        fastScrollEnd: true
       },
     });
 
@@ -201,7 +268,7 @@ const Hero = () => {
         "-=0.4"
       );
 
-    // Canvas animation - updates target frame
+    // Optimized canvas animation
     gsap.to(imgSeq.current, {
       frame: totalFrames - 1,
       snap: "frame",
@@ -210,8 +277,11 @@ const Hero = () => {
         trigger: sectionRef.current,
         start: "top top",
         end: "+=3500",
-        scrub: 0.5,
+        scrub: 0.3,
         pin: true,
+        anticipatePin: 1,
+        fastScrollEnd: true,
+        preventOverlaps: true
       },
       onUpdate: () => {
         targetFrameRef.current = imgSeq.current.frame;
@@ -223,6 +293,7 @@ const Hero = () => {
         cancelAnimationFrame(rafRef.current);
       }
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      gsap.killTweensOf("*");
     };
   }, [firstFrameLoaded]);
 
@@ -237,14 +308,25 @@ const Hero = () => {
           width={1920}
           height={1080}
           className="absolute inset-0 w-full h-screen object-cover z-10"
-          style={{ opacity: firstFrameLoaded ? 1 : 0, transition: 'opacity 0.3s ease-in' }}
+          style={{ 
+            opacity: firstFrameLoaded ? 1 : 0, 
+            transition: 'opacity 0.3s ease-in',
+            willChange: 'contents',
+            transform: 'translateZ(0)'
+          }}
         />
+
+       
 
         {/* First Text */}
         <div
           ref={firstTextRef}
           className="absolute z-20 text-center text-white xl:text-[80px] lg:text-[70px] md:text-[30px] text-[30px] font-medium md:leading-[81px] xl:tracking-[-4px] lg:tracking-[-3px] md:tracking-[-1.5px] tracking-[-1px] left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full"
-          style={{ opacity: 0, visibility: "hidden" }}
+          style={{ 
+            opacity: 0, 
+            visibility: "hidden",
+            willChange: 'opacity, visibility'
+          }}
         >
           <div>Our branding speaks loud</div>
         </div>
@@ -253,7 +335,11 @@ const Hero = () => {
         <div
           ref={secondTextRef}
           className="absolute z-20 text-start xl:text-[80px] lg:text-[70px] md:text-[30px] text-[30px] font-medium md:leading-[81px] xl:tracking-[-4px] lg:tracking-[-3px] md:tracking-[-1.5px] tracking-[-1px] left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 whitespace-nowrap"
-          style={{ opacity: 0, visibility: "hidden" }}
+          style={{ 
+            opacity: 0, 
+            visibility: "hidden",
+            willChange: 'opacity, visibility'
+          }}
         >
           <div className="text-line-2 text-white">Louder than words</div>
         </div>
@@ -278,6 +364,7 @@ const Hero = () => {
           border-radius: 50%;
           animation: pulseCircle 1.5s infinite ease-in-out;
           flex-shrink: 0;
+          will-change: transform, opacity;
         }
 
         @media (min-width: 640px) {
@@ -293,24 +380,24 @@ const Hero = () => {
         }
 
         @keyframes pulseCircle {
-          0%   { opacity: 0.3; transform: scale(0.8) translateX(0); }
-          50%  { opacity: 1;   transform: scale(1.2) translateX(2px); }
-          100% { opacity: 0.3; transform: scale(0.8) translateX(0); }
+          0%   { opacity: 0.3; transform: scale(0.8) translateX(0) translateZ(0); }
+          50%  { opacity: 1;   transform: scale(1.2) translateX(2px) translateZ(0); }
+          100% { opacity: 0.3; transform: scale(0.8) translateX(0) translateZ(0); }
         }
 
         @media (min-width: 640px) {
           @keyframes pulseCircle {
-            0%   { opacity: 0.3; transform: scale(0.8) translateX(0); }
-            50%  { opacity: 1;   transform: scale(1.2) translateX(3px); }
-            100% { opacity: 0.3; transform: scale(0.8) translateX(0); }
+            0%   { opacity: 0.3; transform: scale(0.8) translateX(0) translateZ(0); }
+            50%  { opacity: 1;   transform: scale(1.2) translateX(3px) translateZ(0); }
+            100% { opacity: 0.3; transform: scale(0.8) translateX(0) translateZ(0); }
           }
         }
 
         @media (min-width: 768px) {
           @keyframes pulseCircle {
-            0%   { opacity: 0.3; transform: scale(0.8) translateX(0); }
-            50%  { opacity: 1;   transform: scale(1.2) translateX(4px); }
-            100% { opacity: 0.3; transform: scale(0.8) translateX(0); }
+            0%   { opacity: 0.3; transform: scale(0.8) translateX(0) translateZ(0); }
+            50%  { opacity: 1;   transform: scale(1.2) translateX(4px) translateZ(0); }
+            100% { opacity: 0.3; transform: scale(0.8) translateX(0) translateZ(0); }
           }
         }
       `}</style>

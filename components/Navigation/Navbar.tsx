@@ -14,13 +14,11 @@ if (typeof window !== "undefined") {
 }
 
 // CONSTANTS
-
 const NAV_ITEMS = [
   { name: "About", link: "/about" },
   { name: "Client Portal", link: "/client" },
   { name: "Archive", link: "/archive" },
-  {name:"Brand Stories", link:'/brand-stories'},
-
+  { name: "Brand Stories", link: '/brand-stories' },
 ] as const;
 
 const FULL_NAV_ITEMS = [
@@ -28,7 +26,7 @@ const FULL_NAV_ITEMS = [
   { name: "About", link: "/about" },
   { name: "Client Portal", link: "/client" },
   { name: "Archive", link: "/archive" },
-  {name:"Brand Stories", link:'/brand-stories'},
+  { name: "Brand Stories", link: '/brand-stories' },
   { name: "Contact", link: "/contact" },
 ] as const;
 
@@ -68,38 +66,82 @@ const Navbar = () => {
   // State
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   
   const pathname = usePathname();
   const isWhiteBg = useMemo(() => WHITE_BG_PATHS.includes(pathname), [pathname]);
 
-  // ANIMATION FUNCTIONS
-  const setupInitialStates = useCallback(() => {
-    const { menuButton, overlay, menuLinks, socialLinks, overlayLogo } = refs;
+  // Calculate current animation state based on scroll position
+  const calculateScrollState = useCallback(() => {
+    const scrollY = window.scrollY;
+    const threshold = 50; // matches scrollStart
+    const range = 30; // difference between scrollStart and scrollEnd
     
-    if (!menuButton.current || !overlay.current) return;
+    let progress = 0;
+    if (scrollY > threshold) {
+      progress = Math.min(1, (scrollY - threshold) / range);
+    }
 
-    gsap.set(menuButton.current, {
-      opacity: 0,
-      scale: 0.8,
-      y: -20,
+    const navbarOpacity = Math.max(0, 1 - progress * 2);
+    const navbarY = progress * -80;
+
+    const buttonProgress = Math.max(0, (progress - ANIMATION_CONFIG.buttonFadeThreshold) * 2);
+    const buttonOpacity = Math.min(1, buttonProgress);
+    const buttonScale = 0.8 + buttonOpacity * 0.2;
+    const buttonY = -20 + buttonOpacity * 20;
+
+    return {
+      navbar: { opacity: navbarOpacity, y: navbarY },
+      button: { opacity: buttonOpacity, scale: buttonScale, y: buttonY }
+    };
+  }, []);
+
+  // Setup initial states
+  const setupInitialStates = useCallback(() => {
+    const { menuButton, overlay, menuLinks, socialLinks, overlayLogo, navbar } = refs;
+    
+    if (!menuButton.current || !overlay.current || !navbar.current) return;
+
+    // Calculate initial state based on current scroll position
+    const state = calculateScrollState();
+
+    // Set navbar initial state
+    gsap.set(navbar.current, {
+      opacity: state.navbar.opacity,
+      y: state.navbar.y,
     });
 
+    // Set button initial state
+    gsap.set(menuButton.current, {
+      opacity: state.button.opacity,
+      scale: state.button.scale,
+      y: state.button.y,
+    });
+
+    // Set overlay initial state
     gsap.set(overlay.current, {
       clipPath: "circle(0% at 95% 5%)",
       visibility: "hidden",
     });
 
+    // Set overlay elements initial state
     const overlayElements = [menuLinks.current, socialLinks.current, overlayLogo.current].filter(Boolean);
     if (overlayElements.length > 0) {
       gsap.set(overlayElements, { opacity: 0, y: 50 });
     }
-  }, []);
+  }, [calculateScrollState]);
 
+  // Setup scroll animations
   const setupScrollAnimations = useCallback(() => {
     const { navbar, menuButton } = refs;
     if (!navbar.current || !menuButton.current) return;
 
-    return ScrollTrigger.create({
+    // Kill existing scroll trigger if any
+    if (scrollTriggerRef.current) {
+      scrollTriggerRef.current.kill();
+    }
+
+    const trigger = ScrollTrigger.create({
       trigger: document.body,
       start: ANIMATION_CONFIG.scrollStart,
       end: ANIMATION_CONFIG.scrollEnd,
@@ -121,8 +163,12 @@ const Navbar = () => {
         gsap.set(menuButton.current, { opacity: buttonOpacity, scale: buttonScale, y: buttonY });
       },
     });
+
+    scrollTriggerRef.current = trigger;
+    return trigger;
   }, []);
 
+  // Menu animations
   const openMenu = useCallback(() => {
     const { overlay, plusIcon, overlayLogo, menuLinks, socialLinks } = refs;
     if (!overlay.current || !plusIcon.current) return;
@@ -245,22 +291,62 @@ const Navbar = () => {
     }
   }, [isMenuOpen, toggleMenu]);
 
-  // ============================================================================
-  // EFFECTS
+  // Initial setup effect
   useEffect(() => {
-    setupInitialStates();
-    const scrollTrigger = setupScrollAnimations();
+    // Small delay to ensure DOM is ready
+    const setupTimer = setTimeout(() => {
+      setupInitialStates();
+      setupScrollAnimations();
+    }, 50);
 
     return () => {
-      scrollTrigger?.kill();
+      clearTimeout(setupTimer);
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill();
+      }
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
-  }, [setupInitialStates, setupScrollAnimations]);
+  }, []); // Only run once on mount
 
+  // Handle route changes
+  useEffect(() => {
+    // Close menu if open
+    if (isMenuOpen) {
+      closeMenu();
+      setIsMenuOpen(false);
+    }
 
-  const navLinkClasses = `text-base xl:text-[19px] font-medium transition-colors duration-300 relative group ${
-    isWhiteBg ? "text-black hover:text-gray-700" : "text-white hover:text-gray-300"
-  }`;
+    // Reset scroll to top (optional - remove if you don't want this)
+    // window.scrollTo(0, 0);
+
+    // Kill existing animations and triggers
+    gsap.killTweensOf([refs.navbar.current, refs.menuButton.current]);
+    if (scrollTriggerRef.current) {
+      scrollTriggerRef.current.kill();
+      scrollTriggerRef.current = null;
+    }
+
+    // Reinitialize after a short delay to ensure page has loaded
+    const timer = setTimeout(() => {
+      setupInitialStates();
+      setupScrollAnimations();
+      ScrollTrigger.refresh();
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [pathname]); // Run whenever pathname changes
+
+  // Helper function for nav link classes with active state
+  const getNavLinkClasses = useCallback((itemLink: string) => {
+    const isActive = pathname === itemLink;
+    return `text-base xl:text-[19px] transition-colors duration-300 relative group ${
+      isActive ? "font-bold" : "font-medium"
+    } ${
+      isWhiteBg ? "text-black hover:text-gray-700" : "text-white hover:text-gray-300"
+    }`;
+  }, [pathname, isWhiteBg]);
 
   const ctaButtonClasses = `text-sm sm:text-base lg:text-lg px-3 sm:px-4 py-1 sm:py-1 rounded-full font-medium transition-all duration-300 shadow-lg ${
     isWhiteBg
@@ -290,7 +376,7 @@ const Navbar = () => {
           {/* Desktop Navigation Links */}
           <div className="hidden lg:flex items-center gap-5 xl:gap-6">
             {NAV_ITEMS.map((item, index) => (
-              <Link key={`nav-${index}`} href={item.link} className={navLinkClasses}>
+              <Link key={`nav-${index}`} href={item.link} className={getNavLinkClasses(item.link)}>
                 {item.name}
               </Link>
             ))}
@@ -310,7 +396,6 @@ const Navbar = () => {
         onMouseEnter={handleHoverEnter}
         onMouseLeave={handleHoverLeave}
         className="fixed top-4 right-4 sm:top-5 sm:right-5 lg:top-7 lg:right-6 z-50 w-12 h-12 sm:w-14 sm:h-14 md:w-15 md:h-15 lg:w-17 lg:h-17 bg-white cursor-pointer rounded-full flex items-center justify-center shadow-md transition-all duration-300 group lg:hover:bg-black lg:hover:scale-105 lg:hover:shadow-lg"
-        style={{ opacity: 0 }}
         aria-label={isMenuOpen ? "Close menu" : "Open menu"}
       >
         <div ref={refs.plusIcon} className="transition-transform duration-300 ease-out">
@@ -319,7 +404,7 @@ const Navbar = () => {
       </button>
 
       {/* Full Screen Overlay Menu */}
-      <div ref={refs.overlay}     style={{ visibility: 'hidden', clipPath: 'circle(0% at 95% 5%)' }} className="fixed inset-0 bg-black z-45" role="dialog" aria-modal="true" aria-labelledby="menu-title">
+      <div ref={refs.overlay} style={{ visibility: 'hidden', clipPath: 'circle(0% at 95% 5%)' }} className="fixed inset-0 bg-black z-45" role="dialog" aria-modal="true" aria-labelledby="menu-title">
         <div className="xl:h-full lg:h-full md:h-1/2 h-1/2 w-full flex lg:flex-row flex-col items-start justify-center px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-48">
           {/* Logo */}
           <div className="flex-1 flex items-start justify-start">
@@ -335,25 +420,34 @@ const Navbar = () => {
             {/* Main Navigation */}
             <div ref={refs.menuLinks}>
               <nav className="space-y-2 sm:space-y-3 lg:space-y-4 text-start" id="menu-title">
-                {FULL_NAV_ITEMS.map((item, index) => (
-                  <div key={`overlay-nav-${index}`} className="relative">
-                    <a href={item.link} onClick={handleLinkClick} className="block text-2xl sm:text-2xl md:text-5xl lg:text-4xl xl:text-5xl font-medium tracking-tight text-white hover:text-gray-400 transition-colors">
-                      {item.name}
-                    </a>
+                {FULL_NAV_ITEMS.map((item, index) => {
+                  const isActive = pathname === item.link;
+                  return (
+                    <div key={`overlay-nav-${index}`} className="relative">
+                      <a 
+                        href={item.link} 
+                        onClick={handleLinkClick} 
+                        className={`block text-2xl sm:text-2xl md:text-5xl lg:text-4xl xl:text-5xl tracking-tight text-white hover:text-gray-400 transition-colors ${
+                          isActive ? "font-bold" : "font-medium"
+                        }`}
+                      >
+                        {item.name}
+                      </a>
 
-                    {item.name === "Client Portal" && (
-                      <span className="absolute -top-1 -right-12 sm:-right-14 lg:-right-16 px-2 sm:px-3 py-1 text-xs hover:bg-[#4A5818] bg-[#c7e55b] text-black rounded">
-                        New
-                      </span>
-                    )}
+                      {item.name === "Client Portal" && (
+                        <span className="absolute -top-1 -right-12 sm:-right-14 lg:-right-16 px-2 sm:px-3 py-1 text-xs hover:bg-[#4A5818] bg-[#c7e55b] text-black rounded">
+                          New
+                        </span>
+                      )}
 
-                    {item.name === "Archive" && (
-                      <span className="absolute -top-1 -right-[-4px] md:-right-[-65px] sm:-right-12 lg:right-1 px-2 py-1 text-xs bg-gray-700 text-white rounded">
-                        36
-                      </span>
-                    )}
-                  </div>
-                ))}
+                      {item.name === "Archive" && (
+                        <span className="absolute -top-1 -right-[-4px] md:-right-[-65px] sm:-right-12 lg:right-1 px-2 py-1 text-xs bg-gray-700 text-white rounded">
+                          36
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
               </nav>
             </div>
 
