@@ -174,7 +174,7 @@ const Form = () => {
     formDataToSend.append('category', formData.category);
 
     try {
-      await fetch('https://script.google.com/macros/s/AKfycbwFBkkS5Pi8grmPxMoLrwr4CYXFjsP_bGSUlnUot8wBegbKjErRefJYDMdOxxSFwGPbHw/exec', {
+      await fetch('https://script.google.com/macros/s/AKfycby_-WXohq88Pq_83VfU8BTDjOcCZnASGRWcEpu954o6psL2aSeNQHQnQaYRK6GGsBClWg/exec', {
         method: 'POST',
         body: formDataToSend
       });

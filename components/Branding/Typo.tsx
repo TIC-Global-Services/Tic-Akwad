@@ -73,7 +73,7 @@ const Typo = () => {
           <div className="text-white">
             <p className="mt-2 text-2xl md:text-5xl font-semibold tracking-tighter text-gray-200 max-w-xl">
               Reach out today{" "}
-              <span className="text-[#706e6e]">
+              <span className="text-[#bebbbbdc]">
                 and let’s create a powerful new identity for your brand.
               </span>
             </p>

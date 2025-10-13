@@ -115,7 +115,7 @@ const ArchiveCards = () => {
     <div className="flex flex-col xl:px-[38px] lg:px-[25px] md:px-5 px-5 gap-5   bg-[#F5F5F5] min-h-screen md:pb-20 pb-10">
       <h1 className="text-7xl mt-[35vh] mb-30 text-black font-medium tracking-tighter ">
         Archive<br />
-        <span className="text-[#9F9F9F] tracking-tighter">Some goodies <br /> from our past</span>
+        <span className="text-[#9F9F9F] tracking-tighter">A look back at some of <br />  our favorite creations.</span>
       </h1>
       {ArchiveData.map((data, index) => (
         <ParallaxCard key={index} data={data} index={index} />

@@ -25,7 +25,10 @@ const Join = () => {
             </h1>
           </div>
 
-          <Link href='https://www.instagram.com/the.internetcompany/' className="border border-white bg-transparent text-white font-semibold px-6 py-3 rounded-full hover:bg-white hover:text-black cursor-pointer transition self-start md:text-[20px]">
+          <Link
+            href="https://www.instagram.com/the.internetcompany/"
+            className="border border-white bg-transparent text-white font-semibold px-6 py-3 rounded-full hover:bg-white hover:text-black cursor-pointer transition self-start md:text-[20px]"
+          >
             TIC.Global
           </Link>
         </div>
@@ -38,17 +41,18 @@ const Join = () => {
             </h1>
             <p className="text-[#7F7F7F] text-2xl sm:text-3xl md:text-4xl font-medium max-w-md tracking-tighter mt-2">
               We love connecting with like-minded creatives. Send us your work
-              and a quick hello — let’s see what we can build together.
+              and a quick hello, Let’s see what we can build together.
             </p>
           </div>
 
           <button
-  className="border border-[#4B4845] bg-transparent text-black font-semibold px-4 py-3 rounded-full hover:bg-black hover:text-white transition self-start cursor-pointer md:text-[20px]"
-  onClick={() => window.location.href = 'mailto:admin@theinternetcompany.com'}
->
-  admin@theinternetcompany.com
-</button>
-
+            className="border border-[#4B4845] bg-transparent text-black font-semibold px-4 py-3 rounded-full hover:bg-black hover:text-white transition self-start cursor-pointer md:text-[20px]"
+            onClick={() =>
+              (window.location.href = "mailto:admin@theinternetcompany.com")
+            }
+          >
+            admin@theinternetcompany.com
+          </button>
         </div>
       </div>
     </div>

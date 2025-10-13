@@ -57,7 +57,7 @@ const Footer = () => {
       className="min-h-screen w-full bg-black text-white overflow-hidden"
     >
       <Container>
-          <div className="container mx-auto  py-8 xl:py-15 lg:py-10 h-full flex flex-col justify-between">
+          <div className="mx-auto  py-8 xl:py-15 lg:py-10 h-full flex flex-col justify-center">
         {/* Main Content Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-8 md:mb-16 flex-1 pt-12 sm:pt-16 md:pt-20">
           {content.map((item, index) => {

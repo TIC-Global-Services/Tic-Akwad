@@ -68,7 +68,7 @@ const Vision = () => {
       };
 
       const GOOGLE_SCRIPT_URL =
-        "https://script.google.com/macros/s/AKfycbzNNp1jPQze67RlGMRQrmXERWj_VEpJGZWdHZ1cL_SyEGnSyh-yTTGrqFiCBobsGCCt/exec";
+        "https://script.google.com/macros/s/AKfycby_-WXohq88Pq_83VfU8BTDjOcCZnASGRWcEpu954o6psL2aSeNQHQnQaYRK6GGsBClWg/exec";
 
       await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",

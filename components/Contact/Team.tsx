@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { HiPlus } from "react-icons/hi2";
 
 const contentTeam = [
-  { role: "Admin", name: "Samanvitha", email: "Admin@theinternetcompany.one" },
-  { role: "Senior Designer", name: "Gokul", email: "design@theinternetcompany.one" },
-  { role: "Dev", name: "Bala", email: "dev@theinternetcompany.one" },
+  { role: "Admin", name: "Samanvitha", email: "Admin@ticbyakwad.com" },
+  { role: "Senior Designer", name: "Gokul", email: "design@ticbyakwad.com" },
+  { role: "Dev", name: "Bala", email: "dev@ticbyakwad.com" },
 ];
 
 const Team = () => {
