@@ -40,7 +40,7 @@ const Follow = () => {
           alt="Follow Background"
           width={1000}
           height={1000}
-          className="absolute md:bottom-0 -bottom-10 md:right-15  w-[80%] sm:w-[80%] md:w-[50%] lg:w-[32%] object-cover pointer-events-none select-none"
+          className="absolute md:bottom-0 -bottom-10 md:right-15  w-[80%] sm:w-[80%] md:w-[50%] lg:w-[32%] xl:w-[25%] object-cover pointer-events-none select-none"
         />
       </div>
     </div>
