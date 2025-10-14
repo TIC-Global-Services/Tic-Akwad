@@ -140,10 +140,10 @@ const Footer = () => {
               </span>
               <span className="hidden sm:inline"> / </span>
               <a
-                href="mailto:admin@theinternetcompany.one"
+                href="mailto:admin@ticbyakwad.com"
                 className="hover:text-white/40 block sm:inline mt-1 sm:mt-0"
               >
-                admin@theinternetcompany.one
+                admin@ticbyakwad.com
               </a>
             </div>
           </div>
