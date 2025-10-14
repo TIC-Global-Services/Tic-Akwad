@@ -81,6 +81,7 @@ const Testimonials = () => {
       <div className="flex flex-col space-y-5 p-5 rounded-[10px] bg-[#1A1B1C] mb-2">
         <div className="flex items-center space-x-3">
           <Image
+          unoptimized
             src={image}
             alt={name}
             width={500}

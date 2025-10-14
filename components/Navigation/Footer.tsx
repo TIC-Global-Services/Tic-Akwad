@@ -8,7 +8,7 @@ import Container from "../Reusbale/Container";
 
 const socialLinks = [
   {
-    link: "https://www.instagram.com/the.internetcompany/",
+    link: "https://www.instagram.com/ticbyakwad/?igsh=dXB1ejczMjluNG1y#",
     logo: <FaInstagram />,
   },
   // {
@@ -82,6 +82,7 @@ const Footer = () => {
                       }}
                     >
                       <Image
+                      unoptimized
                         src={item.img}
                         alt={item.name}
                         width={1000}
@@ -136,7 +137,7 @@ const Footer = () => {
 
             <div className="text-center text-xs sm:text-sm md:text-base order-2 flex-1 text-white/30 px-4">
               <span className="block sm:inline">
-                © Copyright TIC GLOBAL SERVICES
+                © Copyright TICBYAKWAD
               </span>
               <span className="hidden sm:inline"> / </span>
               <a

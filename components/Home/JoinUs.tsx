@@ -15,7 +15,7 @@ const Joinus = () => {
        From powerful identities to seamless digital platforms, we help brands make their mark across every touchpoint.
       </p>
 
-      <Image src={ImageVideo} alt="Join us" width={1000} height={1000} className="w-full max-w-5xl mt-10 rounded-xl" />
+      <Image unoptimized src={ImageVideo} alt="Join us" width={1000} height={1000} className="w-full max-w-5xl mt-10 rounded-xl" />
       </Container>
     </div>
    

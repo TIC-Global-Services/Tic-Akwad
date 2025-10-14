@@ -171,6 +171,7 @@ const Vision = () => {
             className="border border-[#2222221A] rounded-[10px] p-6 flex flex-col items-start text-start bg-white hover:shadow-lg transition"
           >
             <Image
+            unoptimized
               src={item.icon}
               alt={item.name}
               className="w-14 h-14 object-contain mb-4"

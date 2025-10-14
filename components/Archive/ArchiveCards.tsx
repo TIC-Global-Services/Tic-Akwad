@@ -92,6 +92,7 @@ const isVideo = /\.(mp4|webm|ogg)(\?|$)/i.test(data.media);
                     />
                   ) : (
                     <Image
+                    unoptimized
                       src={data.media}
                       alt={data.name}
                       width={1000}

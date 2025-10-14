@@ -83,7 +83,7 @@ const Hero = () => {
     rafRef.current = requestAnimationFrame(animate);
   };
 
-  // Aggressive preloading with priority queue
+  // Aggressive preloading with priority queue and caching
   useEffect(() => {
     let loadedCount = 0;
     const priorityFrames = [0, 1, 2, 3, 4, 5, 10, 15, 20, 30, 50, 75, 100, 150, 200, 249];
@@ -91,6 +91,7 @@ const Hero = () => {
 
     // Load first frame with highest priority
     const firstImg = new Image();
+    firstImg.crossOrigin = "anonymous";
     firstImg.src = currentFrame(0);
     images.current[0] = firstImg;
     
@@ -108,6 +109,7 @@ const Hero = () => {
         setTimeout(() => {
           if (frameIndex < totalFrames && !loadedFrames.has(frameIndex)) {
             const img = new Image();
+            img.crossOrigin = "anonymous";
             img.src = currentFrame(frameIndex);
             images.current[frameIndex] = img;
             
@@ -139,6 +141,7 @@ const Hero = () => {
           if (!loadedFrames.has(currentIndex) && !priorityFrames.includes(currentIndex)) {
             const frameIndex = currentIndex;
             const img = new Image();
+            img.crossOrigin = "anonymous";
             img.src = currentFrame(frameIndex);
             images.current[frameIndex] = img;
 
