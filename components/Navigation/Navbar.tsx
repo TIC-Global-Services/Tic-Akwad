@@ -15,7 +15,7 @@ if (typeof window !== "undefined") {
 
 // CONSTANTS
 const NAV_ITEMS = [
-  // { name: "About", link: "/about" },
+  { name: "About", link: "/about" },
   { name: "Client Portal", link: "/client" },
   { name: "Archive", link: "/archive" },
   { name: "Brand Stories", link: '/brand-stories' },
@@ -23,7 +23,7 @@ const NAV_ITEMS = [
 
 const FULL_NAV_ITEMS = [
   { name: "Home", link: "/" },
-  // { name: "About", link: "/about" },
+  { name: "About", link: "/about" },
   { name: "Client Portal", link: "/client" },
   { name: "Archive", link: "/archive" },
   { name: "Brand Stories", link: '/brand-stories' },

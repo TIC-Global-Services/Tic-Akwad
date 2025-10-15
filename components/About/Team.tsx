@@ -1,12 +1,20 @@
 import React from 'react'
 
 const content = [
-    {name:'Pragya', role:'Founder', desc:"For me, Akwad is more than a company — it's a vision brought to life. We started with a simple goal: to help businesses overcome their toughest challenges with solutions they can trust. Seeing our clients grow, succeed, and lead in their industries is the most rewarding part of this journey.", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/1.png?updatedAt=1760168917264'},
-    {name:'Shajid', role:'Founder', desc:"For me, Akwad is more than a company — it's a vision brought to life. We started with a simple goal: to help businesses overcome their toughest challenges with solutions they can trust. Seeing our clients grow, succeed, and lead in their industries is the most rewarding part of this journey.", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/2.png?updatedAt=1760168917535'},
-    {name:'Saravanakumari', role:'Founder', desc:"For me, Akwad is more than a company — it's a vision brought to life. We started with a simple goal: to help businesses overcome their toughest challenges with solutions they can trust. Seeing our clients grow, succeed, and lead in their industries is the most rewarding part of this journey.", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/3.png?updatedAt=1760168917527'},
-    {name:'Samanvitha', role:'Admin', desc:"For me, Akwad is more than a company — it's a vision brought to life. We started with a simple goal: to help businesses overcome their toughest challenges with solutions they can trust. Seeing our clients grow, succeed, and lead in their industries is the most rewarding part of this journey.", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/4.png?updatedAt=1760168917560'},
-    {name:'Gokul', role:'Designer', desc:"For me, Akwad is more than a company — it's a vision brought to life. We started with a simple goal: to help businesses overcome their toughest challenges with solutions they can trust. Seeing our clients grow, succeed, and lead in their industries is the most rewarding part of this journey.", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/5.png?updatedAt=1760168917589'},
-    {name:'Bala Ayyappan', role:'Developer', desc:"For me, Akwad is more than a company — it's a vision brought to life. We started with a simple goal: to help businesses overcome their toughest challenges with solutions they can trust. Seeing our clients grow, succeed, and lead in their industries is the most rewarding part of this journey.", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/6.png?updatedAt=1760168917567'},
+    {name:'Ahmed Saeed', role:'CO-FOUNDER & PARTNER', desc:"", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/9.png?updatedAt=1760521140348'},
+
+    {name:'Sajid', role:'CO-FOUNDER & PARTNER', desc:"", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/2.png?updatedAt=1760168917535'},
+    {name:'Pragya', role:'CO-FOUNDER & CEO', desc:"", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/1.png?updatedAt=1760168917264'},
+
+    {name:'Saravanakumari', role:'Manager', desc:"", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/3.png?updatedAt=1760168917527'},
+    {name:'Samanvitha', role:'HEAD OF MARKETING', desc:"", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/4.png?updatedAt=1760168917560'},
+    {name:'Gokul', role:'DIRECTOR OF DESIGN', desc:"", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/5.png?updatedAt=1760168917589'},
+    {name:'Bala Ayyappan', role:'DIRECTOR OF DEVELOPMENT', desc:"", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/6.png?updatedAt=1760168917567'},
+    {name:'ILHAM AHMED HUSSIEN', role:'ACCOUNTS MANAGER', desc:" ", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/7.png?updatedAt=1760521140346'},
+    {name:'Siva Sankaran', role:'DEVELOPER', desc:"", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/8.png?updatedAt=1760521140336'},
+  
+    
+
 ]
 
 const Team = () => {

@@ -1,3 +1,4 @@
+
 import HeroVideo from "@/components/Home/Hero";
 import ImageChange from "@/components/Home/ImageChange";
 import Joinus from "@/components/Home/JoinUs";
@@ -6,9 +7,10 @@ import Vision from "@/components/Home/Vision";
 
 
 export default function Home() {
+  
   return (
     <div className="">
-      <HeroVideo />
+      <HeroVideo />    
       <ImageChange />
       <Joinus />
       <Testimonials />

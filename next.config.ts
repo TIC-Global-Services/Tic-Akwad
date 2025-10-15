@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export', 
+  // output: 'export', 
   images: {
-    domains: ["ik.imagekit.io"], // 👈 allow this external domain
+    domains: ["ik.imagekit.io"],
   },
 };
 
