@@ -42,6 +42,7 @@ const Founder = () => {
   {Socials.map((item, index) => (
     <Link key={index} href={item.link} target="_blank" rel="noopener noreferrer">
       <Image
+      unoptimized
         src={item.img}
         alt="Social logo"
         width={item.width}

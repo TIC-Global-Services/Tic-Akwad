@@ -37,7 +37,7 @@ const Typo = () => {
                 />
               ) : item.gif ? (
                 <Image
-                
+                  unoptimized
                   src={item.gif}
                   width={1000}
                   height={1000}

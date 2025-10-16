@@ -30,6 +30,7 @@ const Team = () => {
           <div key={index} className='bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300'>
             <div className='w-full  overflow-hidden'>
               <Image
+              unoptimized
               width={1000}
               height={1000} 
                 src={member.img} 

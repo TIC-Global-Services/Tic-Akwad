@@ -15,6 +15,7 @@ const Join = () => {
               <span className="inline-flex items-center gap-2 mt-1">
                 Instagram
                 <Image
+                unoptimized
                   src="https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/62b057942d3c235cc9ecbdad_instagram-notice.svg?updatedAt=1760094735396"
                   alt="Instagram Icon"
                   width={24}

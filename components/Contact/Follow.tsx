@@ -36,7 +36,7 @@ const Follow = () => {
 
         {/* Bottom Right Image */}
         <Image
-        
+        unoptimized
           src="https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/Hand%20mockup.png?updatedAt=1760166456329"
           alt="Follow Background"
           width={1000}

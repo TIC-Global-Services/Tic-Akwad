@@ -211,6 +211,7 @@ const Process = () => {
                     {content.image && (
                       <div className="rounded-2xl overflow-hidden shadow-2xl">
                         <Image
+                        unoptimized
                           src={content.image}
                           alt={content.title}
                           width={1000}

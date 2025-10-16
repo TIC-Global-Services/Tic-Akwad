@@ -82,6 +82,7 @@ const Footer = () => {
                       }}
                     >
                       <Image
+                      unoptimized
                         src={item.img}
                         alt={item.name}
                         width={1000}

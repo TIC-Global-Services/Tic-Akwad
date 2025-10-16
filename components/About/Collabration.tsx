@@ -30,6 +30,7 @@ const Collaboration = () => {
             {/* Image */}
             <div className="w-full h-[300px] md:h-[400px] relative">
               <Image
+              unoptimized
                 src={item.img}
                 alt={item.title || "Content Image"}
                 fill

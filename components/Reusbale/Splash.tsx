@@ -25,42 +25,31 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
 
     const totalFrames = images.length;
     let loadedCount = 0;
-    const startTime = Date.now();
-    const duration = 3000;
     let animationFrameId: number;
 
     const updateProgress = () => {
       loadedCount++;
       console.log(`Image loaded: ${loadedCount}/${totalFrames}`);
 
+      const progressPercent = Math.round((loadedCount / totalFrames) * 100);
+      setProgress(progressPercent);
+
       if (loadedCount === totalFrames) {
         console.log("All images loaded!");
-        setTimeout(() => {
-          setIsVisible(false);
-          onComplete();
-        }, 3000);
+        setIsVisible(false);
+        onComplete();
       }
     };
 
     const animateProgress = () => {
-      const elapsedTime = Date.now() - startTime;
-      const timeProgress = Math.round((elapsedTime / duration) * 100);
-      const currentProgress = Math.min(timeProgress, 100);
-
-      setProgress(currentProgress);
-
       // Logo scale animation
-      const scaleProgression = Math.sin((currentProgress / 100) * Math.PI * 0.5);
+      const scaleProgression = Math.sin((progress / 100) * Math.PI * 0.5);
       setLogoScale(0.8 + scaleProgression * 0.15);
 
       // Glitch effect every 500ms
-      if (Math.floor((elapsedTime / 500) % 2) === 0) {
-        setGlitchActive(Math.random() > 0.7);
-      }
+      setGlitchActive(Math.random() > 0.7);
 
-      if (currentProgress < 100) {
-        animationFrameId = requestAnimationFrame(animateProgress);
-      }
+      animationFrameId = requestAnimationFrame(animateProgress);
     };
 
     animationFrameId = requestAnimationFrame(animateProgress);
@@ -182,6 +171,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
             }}
           >
             <Image
+            unoptimized
             width={1000}
             height={1000}
               src="https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/Frame%205.png?updatedAt=1759756217013"
