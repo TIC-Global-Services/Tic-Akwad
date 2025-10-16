@@ -1,31 +1,56 @@
+// components/Hero.tsx
 "use client";
 
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useMemo, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplashScreen } from "../Reusbale/Splash";
+
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Hero = () => {
+const Hero: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
   const firstTextRef = useRef<HTMLDivElement | null>(null);
   const secondTextRef = useRef<HTMLDivElement | null>(null);
-  const lastFrameRef = useRef(-1);
-  const lastWidthRef = useRef(0);
-  const lastHeightRef = useRef(0);
+  const lastFrameRef = useRef<number>(-1);
+  const lastWidthRef = useRef<number>(0);
+  const lastHeightRef = useRef<number>(0);
+  const animationFrameRef = useRef<number | null>(null);
 
-  const totalFrames = 250;
-  const currentFrame = (index: number) =>
-    `/Mosque/${(index + 1).toString().padStart(4, "0")}.webp`;
-
-  const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
+  const [imagesLoaded, setImagesLoaded] = useState<boolean>(false);
+  const [preloadedImages, setPreloadedImages] = useState<HTMLImageElement[]>(
+    []
+  );
+  const imagesRef = useRef<HTMLImageElement[]>([]);
   const imgSeq = useRef({ frame: 0 });
 
-  // Memoized canvas operations
+  const totalFrames = 250;
+
+  const currentFrame = (index: number): string =>
+    `/Mosque/${(index + 1).toString().padStart(4, "0")}.webp`;
+
+  // Preload images on mount
+  useEffect(() => {
+    const images: HTMLImageElement[] = [];
+
+    for (let i = 0; i < totalFrames; i++) {
+      const img = new Image();
+      img.src = currentFrame(i);
+      images.push(img);
+    }
+
+    setPreloadedImages(images);
+    imagesRef.current = images;
+  }, []);
+
   const canvasOperations = useMemo(() => {
-    const setCanvasSize = (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) => {
+    const setCanvasSize = (
+      canvas: HTMLCanvasElement,
+      context: CanvasRenderingContext2D
+    ): void => {
       const canvasWidth = window.innerWidth;
       const canvasHeight = window.innerHeight;
       const dpr = Math.min(window.devicePixelRatio, 2);
@@ -43,10 +68,15 @@ const Hero = () => {
       context.imageSmoothingQuality = "high";
     };
 
-    const drawFrame = (context: CanvasRenderingContext2D, frameIndex: number) => {
-      const index = Math.min(Math.max(Math.floor(frameIndex), 0), totalFrames - 1);
+    const drawFrame = (
+      context: CanvasRenderingContext2D,
+      frameIndex: number
+    ): void => {
+      const index = Math.min(
+        Math.max(Math.floor(frameIndex), 0),
+        totalFrames - 1
+      );
 
-      // Skip if same frame
       if (index === lastFrameRef.current) return;
       lastFrameRef.current = index;
 
@@ -59,11 +89,10 @@ const Hero = () => {
       context.clearRect(0, 0, canvasWidth, canvasHeight);
       context.save();
 
-      // Cover positioning
       const imgAspectRatio = img.naturalWidth / img.naturalHeight;
       const canvasAspectRatio = canvasWidth / canvasHeight;
 
-      let drawWidth, drawHeight, offsetX, offsetY;
+      let drawWidth: number, drawHeight: number, offsetX: number, offsetY: number;
 
       if (imgAspectRatio > canvasAspectRatio) {
         drawHeight = canvasHeight;
@@ -95,21 +124,13 @@ const Hero = () => {
     return { setCanvasSize, drawFrame };
   }, []);
 
-  // Preload images on mount
-  useEffect(() => {
-    // Initialize array
-    imagesRef.current = new Array(totalFrames).fill(null);
+  const handleSplashComplete = (): void => {
+    setImagesLoaded(true);
+  };
 
-    // Load all images
-    for (let i = 0; i < totalFrames; i++) {
-      const img = new Image();
-      img.src = currentFrame(i);
-      imagesRef.current[i] = img;
-    }
-  }, []);
-
-  // Main animation setup
   useEffect(() => {
+    if (!imagesLoaded) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -122,17 +143,17 @@ const Hero = () => {
 
     contextRef.current = context;
 
-    // Set canvas size
     canvasOperations.setCanvasSize(canvas, context);
-    canvasOperations.drawFrame(context, 0);
 
-    // Set initial text states
+    const initialDrawTimeout = setTimeout(() => {
+      canvasOperations.drawFrame(context, 0);
+    }, 50);
+
     gsap.set([firstTextRef.current, secondTextRef.current], {
       opacity: 0,
       visibility: "hidden",
     });
 
-    // Text animation timeline
     const textTimeline = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
@@ -175,7 +196,6 @@ const Hero = () => {
         "-=0.4"
       );
 
-    // Canvas scroll animation
     const scrollTrigger = ScrollTrigger.create({
       trigger: sectionRef.current,
       start: "top top",
@@ -187,21 +207,26 @@ const Hero = () => {
         const progress = self.progress;
         const targetFrame = progress * (totalFrames - 1);
 
-        gsap.to(imgSeq.current, {
-          frame: targetFrame,
-          duration: 0.3,
-          ease: "power2.out",
-          overwrite: true,
-          onUpdate: () => {
-            canvasOperations.drawFrame(context, imgSeq.current.frame);
-          },
+        if (animationFrameRef.current !== null) {
+          cancelAnimationFrame(animationFrameRef.current);
+        }
+
+        animationFrameRef.current = requestAnimationFrame(() => {
+          gsap.to(imgSeq.current, {
+            frame: targetFrame,
+            duration: 0.2,
+            ease: "power2.out",
+            overwrite: true,
+            onUpdate: () => {
+              canvasOperations.drawFrame(context, imgSeq.current.frame);
+            },
+          });
         });
       },
     });
 
-    // Resize handler
     let resizeTimeout: NodeJS.Timeout;
-    const handleResize = () => {
+    const handleResize = (): void => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
         canvasOperations.setCanvasSize(canvas, context);
@@ -214,16 +239,27 @@ const Hero = () => {
     window.addEventListener("orientationchange", handleResize);
 
     return () => {
+      clearTimeout(initialDrawTimeout);
       clearTimeout(resizeTimeout);
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("orientationchange", handleResize);
       scrollTrigger.kill();
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
-  }, [canvasOperations]);
+  }, [imagesLoaded, canvasOperations]);
 
   return (
     <>
+      {preloadedImages.length > 0 && (
+        <SplashScreen
+          images={preloadedImages}
+          onComplete={handleSplashComplete}
+        />
+      )}
+
       <section
         ref={sectionRef}
         className="w-full h-screen relative overflow-hidden"
@@ -233,9 +269,9 @@ const Hero = () => {
             ref={canvasRef}
             className="absolute inset-0 w-full h-screen object-cover z-10"
             style={{
-              backgroundImage: 'url(/Mosque/0001.webp)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              backgroundImage: "url(/Mosque/0001.webp)",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }}
           />
 

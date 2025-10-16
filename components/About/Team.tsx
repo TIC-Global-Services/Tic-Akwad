@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 
 const content = [
     {name:'Ahmed Saeed', role:'CO-FOUNDER & PARTNER', desc:"", img:'https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/9.png?updatedAt=1760521140348'},
@@ -28,7 +29,9 @@ const Team = () => {
         {content.map((member, index) => (
           <div key={index} className='bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300'>
             <div className='w-full  overflow-hidden'>
-              <img 
+              <Image
+              width={1000}
+              height={1000} 
                 src={member.img} 
                 alt={member.name}
                 className='w-full h-[320px] object-cover'
