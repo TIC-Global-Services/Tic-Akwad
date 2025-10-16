@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -209,9 +210,11 @@ const Process = () => {
                     </div>
                     {content.image && (
                       <div className="rounded-2xl overflow-hidden shadow-2xl">
-                        <img
+                        <Image
                           src={content.image}
                           alt={content.title}
+                          width={1000}
+                          height={1000}
                           className="w-full h-64 md:h-100  lg:h-100 xl:h-100 object-cover"
                           loading="lazy"
                         />

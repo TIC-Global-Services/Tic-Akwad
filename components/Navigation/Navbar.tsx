@@ -411,7 +411,7 @@ const Navbar = () => {
           <div className="flex-1 flex items-start justify-start">
             <div ref={refs.overlayLogo} className="flex-shrink-0">
               <a href="/" onClick={handleLinkClick}>
-                <img src='https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/Frame%205.png?updatedAt=1759756217013' alt="The Internet Company Logo" className="h-20 sm:h-20 lg:h-30 w-auto" />
+                <Image src='https://ik.imagekit.io/99y1fc9mh/TIC_Akwad/Frame%205.png?updatedAt=1759756217013' alt="The Internet Company Logo" width={500} height={500} className="h-20 sm:h-20 lg:h-30 w-auto" />
               </a>
             </div>
           </div>
