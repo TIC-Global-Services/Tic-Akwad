@@ -6,7 +6,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplashScreen } from "../Reusbale/Splash";
 
-
 gsap.registerPlugin(ScrollTrigger);
 
 const Hero: React.FC = () => {
@@ -21,9 +20,8 @@ const Hero: React.FC = () => {
   const animationFrameRef = useRef<number | null>(null);
 
   const [imagesLoaded, setImagesLoaded] = useState<boolean>(false);
-  const [preloadedImages, setPreloadedImages] = useState<HTMLImageElement[]>(
-    []
-  );
+  const [preloadedImages, setPreloadedImages] = useState<HTMLImageElement[]>([]);
+  const [showSplash, setShowSplash] = useState<boolean>(true);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const imgSeq = useRef({ frame: 0 });
 
@@ -44,6 +42,7 @@ const Hero: React.FC = () => {
 
     setPreloadedImages(images);
     imagesRef.current = images;
+    setShowSplash(true); // Ensure splash shows immediately
   }, []);
 
   const canvasOperations = useMemo(() => {
@@ -125,6 +124,7 @@ const Hero: React.FC = () => {
   }, []);
 
   const handleSplashComplete = (): void => {
+    setShowSplash(false);
     setImagesLoaded(true);
   };
 
@@ -253,7 +253,7 @@ const Hero: React.FC = () => {
 
   return (
     <>
-      {preloadedImages.length > 0 && (
+      {showSplash && preloadedImages.length > 0 && (
         <SplashScreen
           images={preloadedImages}
           onComplete={handleSplashComplete}

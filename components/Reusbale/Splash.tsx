@@ -13,14 +13,21 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
   images = [],
 }) => {
   const [progress, setProgress] = useState(0);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(true); // Always visible initially
   const [logoScale, setLogoScale] = useState(0.8);
   const [glitchActive, setGlitchActive] = useState(false);
 
   useEffect(() => {
+    // Show splash immediately, even with no images
+    setIsVisible(true);
+
     if (images.length === 0) {
-      onComplete();
-      return;
+      // Minimum splash duration for better UX (e.g., 1.5 seconds)
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+        onComplete();
+      }, 1500);
+      return () => clearTimeout(timer);
     }
 
     const totalFrames = images.length;
@@ -36,19 +43,18 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
 
       if (loadedCount === totalFrames) {
         console.log("All images loaded!");
-        setIsVisible(false);
-        onComplete();
+        // Add slight delay before hiding for smooth transition
+        setTimeout(() => {
+          setIsVisible(false);
+          onComplete();
+        }, 300);
       }
     };
 
     const animateProgress = () => {
-      // Logo scale animation
       const scaleProgression = Math.sin((progress / 100) * Math.PI * 0.5);
       setLogoScale(0.8 + scaleProgression * 0.15);
-
-      // Glitch effect every 500ms
       setGlitchActive(Math.random() > 0.7);
-
       animationFrameId = requestAnimationFrame(animateProgress);
     };
 
@@ -91,7 +97,6 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
 
   return (
     <>
-      {/* Animated background gradients */}
       <style>{`
         @keyframes gradientShift {
           0% { background-position: 0% 50%; }
@@ -119,7 +124,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
       `}</style>
 
       <div
-        className={`fixed inset-0 z-50 px-20 flex flex-col items-start justify-between py-20 w-full transition-all duration-700 overflow-hidden ${
+        className={`fixed inset-0 z-50 px-20 flex flex-col items-start justify-between py-20 w-full transition-all duration-100 overflow-hidden ${
           isVisible ? "bg-[#000000]" : "pointer-events-none"
         }`}
         style={{
@@ -127,7 +132,6 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
           background: "radial-gradient(ellipse at center, rgba(10, 10, 10, 0.8)  10%, #000000 100%)",
         }}
       >
-        {/* Animated line effect background */}
         <div
           className="absolute inset-0 opacity-10"
           style={{
@@ -138,7 +142,6 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
           }}
         />
 
-        {/* Glow orbs */}
         <div
           className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-2 blur-3xl"
           style={{
@@ -154,7 +157,6 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
           }}
         />
 
-        {/* Logo Container */}
         <div
           className="flex relative z-10"
           style={{
@@ -181,9 +183,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
           </div>
         </div>
 
-        {/* Loading Section */}
         <div className="flex flex-col w-full items-end gap-8 relative z-10">
-          {/* Loading Text with fade */}
           <div
             className="text-end"
             style={{
@@ -201,9 +201,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
             </div>
           </div>
 
-          {/* Animated Progress Bar */}
           <div className="w-full space-y-3">
-            {/* Outer glow container */}
             <div
               className="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden shadow-lg"
               style={{
@@ -211,7 +209,6 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
                   "0 0 30px rgba(217, 119, 6, 0.3), inset 0 0 15px rgba(217, 119, 6, 0.1)",
               }}
             >
-              {/* Inner animated bar */}
               <div
                 className="h-full bg-white rounded-full"
                 style={{
@@ -224,7 +221,6 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
               />
             </div>
 
-            {/* Subtle scan line */}
             <div
               className="w-full h-px"
               style={{
